@@ -108,7 +108,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
  */
 //TODO(lukem): Update before submitting.
 MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ =
-    'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer' +
+    'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/' +
     'images/m';
 
 
