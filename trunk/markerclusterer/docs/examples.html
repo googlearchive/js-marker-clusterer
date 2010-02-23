@@ -2,177 +2,109 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Examples</title>
-    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"/>
-    <link rel="stylesheet" type="text/css" href="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/util/docs/template/local_extensions.css"/>
+    <title>MarkerCluster for v3 Documentation: Examples</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
   </head>
+
   <body onload="prettyPrint()">
-<div>
-<a name="Top"></a>  
-<h1><a></a><span lang="en-us">KeyDragZoom</span> Examples</h1>
-</div>
-<p><a href="reference.html">API Reference</a></p>
-<div>
-<h2><a name="HowTo"></a>Include Scripts</h2>
-<p>
-    This class allows a user to zoom in to an area on the map by holding down a hot key (e.g., Shift) while dragging a box around the area. It works with
-    <a href="http://code.google.com/apis/maps/documentation/v3/">Google Maps API V3</a>. </p>
-    <p>
-The first step is to include <code><span lang="en-us">keydragzoom</span>.js</code> or 
-    <code><span lang="en-us">keydragzoom</span>_packed.js</code> 
-in your document header, after the Google Maps API is loaded. You can use the online version if you do not want to download the script.</p>
-    <pre class="prettyprint">
-      &lt;script src=&quot;/path/to/keydragzoom_packed.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-    </pre>
-</div>
+    <h1><a name="Marker_Clusterer_Examples" id="Marker_Clusterer_Examples"></a>
+      MarkerClusterer v3 Examples</h1>
 
-<div><h2><span lang="en-us">Enable KeyDragZoom</span></h2> 
-<p><span lang="en-us">You can simply call <code>google.maps.Map.enableKeyDragZoom()</code> to enable KeyDragZoom.</span></p>
+    <p>To use a marker clusterer, create a <code>MarkerClusterer</code> object.
+        In the simplest case, just pass a map to it.</p>
+<pre class="prettyprint">
+var center = new google.maps.LatLng(37.4419, -122.1419);
+var options = {
+  'zoom': 13,
+  'center': center,
+  'mapTypeId': google.maps.MapTypeId.ROADMAP
+};
+
+var map = new google.maps.Map(document.getElementById("map"), options);
+var mc = new MarkerClusterer(map);
+</pre>
+
+     <p>You may also specify a number of options to fine-tune the marker
+        manager's performance. These options are passed via a object.
+     </p>
 
 <pre class="prettyprint">
-        function init(){
-         var myOptions = { 
-            zoom: 13, 
-            center: new google.maps.LatLng(49.2903, -123.1294), 
-            mapTypeId: google.maps.MapTypeId.ROADMAP 
-           };
-          var map = new google.maps.Map(document.getElementById(&quot;map&quot;), myOptions); 
-          //...
-       <span lang="en-us">   map.enableKeyDragZoom();</span>  
-        }
-    </pre>
+var center = new google.maps.LatLng(37.4419, -122.1419);
+var options = {
+  'zoom': 13,
+  'center': center,
+  'mapTypeId': google.maps.MapTypeId.ROADMAP
+};
 
-<p>
-<a target="_blank" href="../examples/dragzoom.html">View example </a>
-</p>
-</div>
+var map = new google.maps.Map(document.getElementById("map"), options);
 
-<div><h2><span lang="en-us">Styling the Zoom Box</span></h2> 
-<p>You can pass some CSS properties when you enable KeyDragZoom. Properties for boxStyle will be applied to the zoom box and properties for paneStyle will be applied to the "veil" that appears over the map when you hold down the hot key. In the following example, 
-the zoom box is 50% transparent with a red background and a thick dashed black border.</p>
+var mcOptions = {gridSize: 50, maxZoom: 15};
+var mc = new MarkerClusterer(map, [], mcOptions);
+</pre>
+
+    <p>Once you create a marker cluster, you will want to add markers to it.
+      <code>MarkerClusterer</code> supports adding markers using the
+      <code>addMarker()</code> and <code>addMarkers()</code>method or by
+      providing a array of markers to the constructor:</p>
+<pre class="prettyprint">
+var center = new google.maps.LatLng(37.4419, -122.1419);
+var options = {
+  'zoom': 13,
+  'center': center,
+  'mapTypeId': google.maps.MapTypeId.ROADMAP
+};
+
+var map = new google.maps.Map(document.getElementById("map"), options);
+
+var mcOptions = {gridSize: 50, maxZoom: 15};
+var markers = [...]; // Create the markers you want to add and collect them into a array.
+var mc = new MarkerClusterer(map, markers, mcOptions);
+</pre>
+
+    <h2><a name="Marker_Clusterer" id="Marker_Clusterer"></a>A Simple MarkerClusterer Example:</h2>
+
+    <p>This example will show 100 markers on map.</p>
 
 <pre class="prettyprint">
-        function init(){
-          var myOptions = { 
-            zoom: 13, 
-            center: new google.maps.LatLng(49.2903, -123.1294), 
-            mapTypeId: google.maps.MapTypeId.ROADMAP 
-           };
-          var map = new google.maps.Map(document.getElementById(&quot;map&quot;), myOptions); 
-          map.enableKeyDragZoom({
-                boxStyle: {
-                  border: "thick dashed black",
-                  backgroundColor: "red",
-                  opacity: 0.5
-                },
-                paneStyle: {
-                  backgroundColor: "gray",
-                  opacity: 0.2
-                }
-          });
-        }
-    </pre>
+var center = new google.maps.LatLng(37.4419, -122.1419);
+var options = {
+  'zoom': 13,
+  'center': center,
+  'mapTypeId': google.maps.MapTypeId.ROADMAP
+};
 
-<p>
-<a target="_blank" href="../examples/stylebox.html">View example </a>
-</p>
-</div>
-<div><h2><span lang="en-us">Defining the Hot Key</span></h2> 
-<p>If you do not want using the Shift key as the hot key, you can assign the <tt>key</tt> property to one of the other two keys that are supported: Alt or Ctrl.
-In the following example, you can start the drag zoom by holding down the Ctrl key</p>
+var map = new google.maps.Map(document.getElementById("map"), options);
 
-<pre class="prettyprint">
-        function init(){
-          var myOptions = { 
-            zoom: 13, 
-            center: new google.maps.LatLng(49.2903, -123.1294), 
-            mapTypeId: google.maps.MapTypeId.ROADMAP 
-           };
-          var map = new google.maps.Map(document.getElementById(&quot;map&quot;), myOptions); 
-          map.enableKeyDragZoom({
-            key: 'ctrl'
-          });
-        }
-    </pre>
+var markers = [];
+for (var i = 0; i &lt; 100; i++) {
+  var latLng = new google.maps.LatLng(data.photos[i].latitude,
+      data.photos[i].longitude);
+  var marker = new google.maps.Marker({'position': latLng});
+  markers.push(marker);
+}
+var markerCluster = new MarkerClusterer(map, markers);
+</pre>
 
-<p>
-<a target="_blank" href="../examples/ctrlkey.html">View example </a>
-</p>
-</div>
-<div><h2><span lang="en-us">Supporting Multiple Maps on One Page</span></h2> 
-<p>Each map can have its own KeyDragZoom tool that works independently of the other.</p>
+    <p><a href="../examples/simple_example.html">View example (simple_example.html)</a></p>
 
-<pre class="prettyprint">
-        var map1;
-        var map2;
-            function createMap(mapDiv) {
-               var myOptions = {
-                zoom: 12,
-                center: new google.maps.LatLng(35.227, -80.84),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-              }
-              var map = new google.maps.Map(document.getElementById(mapDiv), myOptions);
-              
-              
-              map.enableKeyDragZoom({
-                key: "shift",
-                boxStyle: {
-                  border: "2px dashed black",
-                  backgroundColor: "red",
-                  opacity: 0.5
-                },
-                paneStyle: {
-                  backgroundColor: "gray",
-                  opacity: 0.2
-                }
-              });
-              return map;
-            }
-            
-            function init() {
-              map1 = createMap('map1');
-              map2 = createMap('map2');
-              
-            }
-    </pre>
+    <h2>
+      <a name="Marker_Clusterer_Advanced" id="Marker_Clusterer_Advanced"></a>
+      Advanced MarkerClusterer Example:
+    </h2>
+    <p>With this example, you can test <code>MarkerClusterer</code> with
+    different max zoom levels, grid size and styles, all the options.<br /></p>
+    <p><a href="../examples/advanced_example.html">View example
+      (advanced_example.html)</a></p>
 
-<p>
-<a target="_blank" href="../examples/multimap.html">View example </a> 
-</p>
-</div>
-
-<div><h2><span lang="en-us">Events</span></h2> 
-<p>The KeyDragZoom tool triggers different events at key moments of the drag zoom operation.</p>
-
-<pre class="prettyprint">
-       map.enableKeyDragZoom();
-          var dz = map.getDragZoomObject();
-          google.maps.event.addListener(dz, 'activate', function() {
-           // do things
-          });
-          google.maps.event.addListener(dz, 'dragstart', function() {
-           // do things
-          });
-          google.maps.event.addListener(dz, 'drag', function() {
-          // do things
-          });
-        }
-    </pre>
-
-<p>
-<a target="_blank" href="../examples/events.html">View example </a>
-</p>
-
-          
-</div>
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-var pageTracker = _gat._getTracker("UA-3946449-5");
-pageTracker._trackPageview();
-</script>
-</body>
+    <h2>
+      <a name="Marker_Clusterer_Speed_Test" id="Marker_Clusterer_Speed_Test"></a>
+      Speed Test Example
+    </h2>
+    <p>This example will compare adding markers with
+    <code>MarkerClusterer</code> to the normal method of adding markers, and
+    display the time for each.</p>
+    <p><a href="../examples/speed_test_example.html">View example
+      (speed_test_example.html)</a></p>
+  </body>
 </html>
