@@ -2,92 +2,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>KeyDragZoom for V3 v1.0 Reference</title>
+    <title>MarkerClusterer for Google Maps v3 vversion 1.0 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
   <body>
-    <h1>KeyDragZoom for V3</h1>
+    <h1>MarkerClusterer for Google Maps v3</h1>
     <p>
-This library adds a drag zoom capability to a Google map. When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code> while dragging a box around an area of interest will zoom the map to that area when the hot key is released.  Only one line of code is needed: <code>google.maps.Map.enableKeyDragZoom();</code> <p> Note that if the map's container has a border around it, the border widths must be specified in px units (or as thin, medium, or thick). This is required because of an MSIE limitation. <p>NL: 2009-05-28: initial port to core API V3. NL: 2009-11-02: added a temp fix for -moz-transform for FF3.5.x using code from Paul Kulchenko (http://notebook.kulchenko.com/maps/gridmove).   NL: 2010-02-02: added a fix for IE flickering on divs onmousemove, caused by scroll value when get mouse position.</p>
+The libary creates and manages per-zoom-level clusters for large amounts of
+markers.
+<br/>
+This is a v3 implementation of the 
+<a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/"
+>v2 Markerclusterer</a>.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
-      <h2><a name="DragZoom"></a>class DragZoom</h2>
-      <p>This class represents a drag zoom object for a map. The object is activated by holding down the hot key.This object is created when <code>google.maps.Map.enableKeyDragZoom</code> is called; it cannot be created directly.Use <code>google.maps.Map.getDragZoomObject</code> to gain access to this object in order to attach event listeners.</p>
+      <h2><a name="MarkerClusterer"></a>class MarkerClusterer</h2>
+      <p>  This class extends <code>google.maps.OverlayView</code>.</p>
       
-        <h3>Events</h3>
-        <table summary="class DragZoom - Events" width="90%">
+        <h3>Constructor</h3>
+        <table summary="class MarkerClusterer - Constructor" width="90%">
           
           <tbody>
             <tr>
-              <th>Events</th>
-              
-                
-                  <th>Arguments</th>
-                
+              <th>Constructor</th>
               
               <th>Description</th>
             </tr>
             
               <tr class="odd">
-                <td><code>activate</code></td>
+                <td><code>MarkerClusterer(<span class="type">map:google.maps.Map</span>, <span class="type">opt_markers:Array.&lt;google.maps.Marker&gt;</span>, <span class="type">opt_options:Object</span>)</code></td>
                 
-                  
-                    <td><code>None</code></td>
-                  
-                
-                <td>This event is fired when the hot key is pressed.</td>
-              </tr>
-            
-              <tr class="even">
-                <td><code>deactivate</code></td>
-                
-                  
-                    <td><code>None</code></td>
-                  
-                
-                <td>This event is fired when the user releases the hot key.</td>
-              </tr>
-            
-              <tr class="odd">
-                <td><code>drag</code></td>
-                
-                  
-                    <td><code><span class="type">southwestPixel:Point</span>, <span class="type">northeastPixel:Point</span></code></td>
-                  
-                
-                <td>This event is repeatedly fired while the user drags the zoom box. The southwest and northeastpoint are passed as parameters of type <code>google.maps.Point</code> (for performance reasons),relative to the map container. Note: the event listener is responsible for converting Pixel to LatLng, if necessary.</td>
-              </tr>
-            
-              <tr class="even">
-                <td><code>dragend</code></td>
-                
-                  
-                    <td><code><span class="type">newBounds:GLatLngBounds</span></code></td>
-                  
-                
-                <td>This event is fired when the drag operation ends. Note that the event is not fired if the hot key is released before the drag operation ends.</td>
-              </tr>
-            
-              <tr class="odd">
-                <td><code>dragstart</code></td>
-                
-                  
-                    <td><code><span class="type">startLatLng:GLatLng</span></code></td>
-                  
-                
-                <td>This event is fired when the drag operation begins.</td>
+                <td>A Marker Clusterer that clusters markers.</td>
               </tr>
             
           </tbody>
         </table>
       
-    
-      <h2><a name="google.maps.Map"></a>class Map</h2>
-      <p>These are new methods added to the Google Maps API's<a href='http://code.google.com/apis/maps/documentation/v3/reference.html#Map'>Map</a>class.</p>
-      
         <h3>Methods</h3>
-        <table summary="class Map - Methods" width="90%">
+        <table summary="class MarkerClusterer - Methods" width="90%">
           
           <tbody>
             <tr>
@@ -101,94 +54,213 @@ This library adds a drag zoom capability to a Google map. When drag zoom is ena
             </tr>
             
               <tr class="odd">
-                <td><code>disableKeyDragZoom()</code></td>
+                <td><code>addMarker(<span class="type">marker:google.maps.Marker</span>, <span class="type">opt_nodraw:boolean</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
-                <td>Disable drag zoom.</td>
+                <td>Adds a marker to the clusterer and redraws if needed.</td>
               </tr>
             
               <tr class="even">
-                <td><code>enableKeyDragZoom(<span class="type">opt_zoomOpts?:KeyDragZoomOptions</span>)</code></td>
+                <td><code>addMarkers(<span class="type">markers:Array.&lt;google.maps.Marker&gt;</span>, <span class="type">opt_nodraw:boolean</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
-                <td>Enable drag zoom. The user can zoom to an area of interest by holding down the hot key<code>(shift | ctrl | alt )</code> while dragging a box around the area.</td>
+                <td>Add an array of markers to the clusterer.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>getDragZoomObject()</code></td>
+                <td><code>clearMarkers()</code></td>
                 
                   
-                    <td><code>DragZoom</code></td>
+                    <td><code>None</code></td>
                   
                 
-                <td>Returns the DragZoom object which is created when <code>google.maps.Map.enableKeyDragZoom</code> is called.With this object you can use <code>google.maps.event.addListener</code> to attach event listenersfor the 'activate', 'deactivate', 'dragstart', 'drag', and 'dragend' events.</td>
+                <td>Clears all clusters and markers from the clusterer.</td>
               </tr>
             
               <tr class="even">
-                <td><code>keyDragZoomEnabled()</code></td>
+                <td><code>getCalculator()</code></td>
+                
+                  
+                    <td><code>function(Array|number)</code></td>
+                  
+                
+                <td>Get the calculator function.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>getExtendedBounds(<span class="type">bounds:google.maps.LatLngBounds</span>)</code></td>
+                
+                  
+                    <td><code>google.maps.LatLngBounds</code></td>
+                  
+                
+                <td>Extends a bounds object by the grid size.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getGridSize()</code></td>
+                
+                  
+                    <td><code>number</code></td>
+                  
+                
+                <td>Returns the size of the grid.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>getMap()</code></td>
+                
+                  
+                    <td><code>google.maps.Map</code></td>
+                  
+                
+                <td>Returns the google map that the clusterer is associated with.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getMarkers()</code></td>
+                
+                  
+                    <td><code>Array.<google.maps.Marker></code></td>
+                  
+                
+                <td>Returns the array of markers in the clusterer.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>getMaxZoom()</code></td>
+                
+                  
+                    <td><code>number</code></td>
+                  
+                
+                <td>Gets the max zoom for the clusterer.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getStyles()</code></td>
+                
+                  
+                    <td><code>Object</code></td>
+                  
+                
+                <td>Gets the styles.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>getTotalClusters()</code></td>
+                
+                  
+                    <td><code>number</code></td>
+                  
+                
+                <td>Returns the number of clusters in the clusterer.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getTotalMarkers()</code></td>
+                
+                  
+                    <td><code>Array.<google.maps.Marker></code></td>
+                  
+                
+                <td>Returns the array of markers in the clusterer.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>isZoomOnClick()</code></td>
                 
                   
                     <td><code>boolean</code></td>
                   
                 
-                <td>Returns <tt>true</tt> if the drag zoom feature has been enabled.</td>
-              </tr>
-            
-          </tbody>
-        </table>
-      
-    
-      <h2><a name="KeyDragZoomOptions"></a>class KeyDragZoomOptions</h2>
-      <p>This class represents the optional parameter passed into <code>google.maps.Map.enableKeyDragZoom</code>.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
-      
-        <h3>Properties</h3>
-        <table summary="class KeyDragZoomOptions - Properties" width="90%">
-          
-          <tbody>
-            <tr>
-              <th>Properties</th>
-              
-                
-                  <th>Type</th>
-                
-              
-              <th>Description</th>
-            </tr>
-            
-              <tr class="odd">
-                <td><code>boxStyle</code></td>
-                
-                  
-                    <td><code>Object</code></td>
-                  
-                
-                <td>The CSS style of the zoom box.The default is <code>{border: 'thin solid #FF0000'}</code>.Border widths must be specified in px units (or as thin, medium, or thick) because of an MSIE limitation.</td>
+                <td>Whether zoom on click is set.</td>
               </tr>
             
               <tr class="even">
-                <td><code>key</code></td>
+                <td><code>redraw()</code></td>
                 
                   
-                    <td><code>string</code></td>
+                    <td><code>None</code></td>
                   
                 
-                <td>The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>.The default is <code>shift</code>.</td>
+                <td>Redraws the clusters.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>paneStyle</code></td>
+                <td><code>removeMarker(<span class="type">marker:google.maps.Marker</span>)</code></td>
                 
                   
-                    <td><code>Object</code></td>
+                    <td><code>boolean</code></td>
                   
                 
-                <td>The CSS style of the pane which overlays the map when a drag zoom is activated.The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.</td>
+                <td>Remove a marker from the cluster.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>resetViewport()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Clears all existing clusters and recreates them.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>setCalculator(<span class="type">calculator:function(Array|number)</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set the calculator function.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setGridSize(<span class="type">size:number</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Returns the size of the grid.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>setMap(<span class="type">map:google.maps.Map</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Sets the google map that the clusterer is associated with.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setMaxZoom(<span class="type">maxZoom:number</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Sets the max zoom for the clusterer.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>setStyles(<span class="type">styles:Object</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Sets the styles.</td>
               </tr>
             
           </tbody>
