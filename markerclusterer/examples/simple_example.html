@@ -60,7 +60,7 @@
         });
 
         var markers = [];
-        for (var i = 0, dataPhoto; dataPhoto = data.photos[i] && i < 100; i++) {
+        for (var i = 0, dataPhoto; dataPhoto = data.photos[i]; i++) {
           var latLng = new google.maps.LatLng(dataPhoto.latitude,
               dataPhoto.longitude);
           var marker = new google.maps.Marker({
@@ -68,7 +68,7 @@
           });
           markers.push(marker);
         }
-
+        
         var markerCluster = new MarkerClusterer(map, markers);
       }
     </script>
