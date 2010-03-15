@@ -11,7 +11,7 @@
  * The libary creates and manages per-zoom-level clusters for large amounts of
  * markers.
  * <br/>
- * This is a v3 implementation of the 
+ * This is a v3 implementation of the
  * <a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/"
  * >v2 Markerclusterer</a>.
  */
@@ -356,7 +356,18 @@ MarkerClusterer.prototype.addMarker = function(marker, opt_nodraw) {
  * @return {boolean} True if the marker was removed.
  */
 MarkerClusterer.prototype.removeMarker = function(marker) {
-  var index = this.markers_.indexOf(marker);
+  var index = -1;
+  if (this.markers_.indexOf) {
+    index = this.markers_.indexOf(marker);
+  } else {
+    for (var i = 0, m; m = this.markers_[i]; i++) {
+      if (m == marker) {
+        index = i;
+        continue;
+      }
+    }
+  }
+
   if (index == -1) {
     // Marker is not in our list of markers.
     return false;
@@ -586,7 +597,16 @@ function Cluster(markerClusterer) {
  * @return {boolean} True if the marker is already added.
  */
 Cluster.prototype.isMarkerAlreadyAdded = function(marker) {
-  return this.markers_.indexOf(marker) != -1;
+  if (this.markers_.indexOf) {
+    return this.markers_.indexOf(marker) != -1;
+  } else {
+    for (var i = 0, m; m = this.markers_[i]; i++) {
+      if (m == marker) {
+        return true;
+      }
+    }
+  }
+  return false;
 };
 
 
