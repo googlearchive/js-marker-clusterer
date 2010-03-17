@@ -8,12 +8,12 @@
  * @version version 1.0
  * @author Luke Mahe
  * @fileoverview
- * The libary creates and manages per-zoom-level clusters for large amounts of
+ * The library creates and manages per-zoom-level clusters for large amounts of
  * markers.
  * <br/>
  * This is a v3 implementation of the
  * <a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/"
- * >v2 Markerclusterer</a>.
+ * >v2 MarkerClusterer</a>.
  */
 
 /**
@@ -546,7 +546,10 @@ MarkerClusterer.prototype.createClusters_ = function() {
   }
 
   // Get our current map view bounds.
-  var bounds = this.getExtendedBounds(this.map_.getBounds());
+  // Create a new bounds object so we don't affect the map.
+  var mapBounds = new google.maps.LatLngBounds(this.map_.getBounds().getSouthWest(),
+      this.map_.getBounds().getNorthEast());
+  var bounds = this.getExtendedBounds(mapBounds);
 
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
     var added = false;
