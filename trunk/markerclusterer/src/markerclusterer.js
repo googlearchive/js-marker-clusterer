@@ -555,10 +555,11 @@ MarkerClusterer.prototype.createClusters_ = function() {
     var added = false;
     if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
       for (var j = 0, cluster; cluster = this.clusters_[j]; j++) {
-        if (cluster.getCenter() &&
+        if (!added && cluster.getCenter() &&
             cluster.isMarkerInClusterBounds(marker)) {
           added = true;
           cluster.addMarker(marker);
+          break;
         }
       }
 
