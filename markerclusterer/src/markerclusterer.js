@@ -322,11 +322,12 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
   marker.setVisible(false);
   marker.setMap(null);
   marker.isAdded = false;
-  if (marker.draggable) {
+  if (marker['draggable']) {
     // If the marker is draggable add a listener so we update the clusters on
     // the drag end.
     var that = this;
     google.maps.event.addListener(marker, 'dragend', function() {
+      marker.isAdded = false;
       that.resetViewport();
       that.redraw();
     });
