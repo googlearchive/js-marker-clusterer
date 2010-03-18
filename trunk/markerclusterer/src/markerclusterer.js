@@ -69,14 +69,14 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
   var options = opt_options || {};
 
-  this.gridSize_ = options.gridSize || 60;
-  this.maxZoom_ = options.maxZoom || null;
-  this.styles_ = options.styles || [];
-  this.imagePath_ = options.imagePath ||
+  this.gridSize_ = options['gridSize'] || 60;
+  this.maxZoom_ = options['maxZoom'] || null;
+  this.styles_ = options['styles'] || [];
+  this.imagePath_ = options['imagePath'] ||
       this.MARKER_CLUSTER_IMAGE_PATH_;
-  this.imageExtension_ = options.imageExtension ||
+  this.imageExtension_ = options['imageExtension'] ||
       this.MARKER_CLUSTER_IMAGE_EXTENSION_;
-  this.zoomOnClick_ = options.zoomOnClick || true;
+  this.zoomOnClick_ = options['zoomOnClick'] || true;
 
   this.setupStyles_();
 
