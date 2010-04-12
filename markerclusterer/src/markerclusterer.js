@@ -86,10 +86,9 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   var that = this;
   google.maps.event.addListener(this.map_, 'zoom_changed', function() {
     that.resetViewport();
-    that.redraw();
   });
 
-  google.maps.event.addListener(this.map_, 'drag', function() {
+  google.maps.event.addListener(this.map_, 'bounds_changed', function() {
     that.redraw();
   });
 
@@ -106,7 +105,6 @@ function MarkerClusterer(map, opt_markers, opt_options) {
  * @type {string}
  * @private
  */
-//TODO(lukem): Update before submitting.
 MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ =
     'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/' +
     'images/m';
