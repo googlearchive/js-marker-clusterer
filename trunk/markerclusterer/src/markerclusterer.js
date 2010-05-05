@@ -82,10 +82,15 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
   this.setMap(map);
 
+  this.prevZoom_ = this.map_.getZoom();
+
   // Add the map event listeners
   var that = this;
   google.maps.event.addListener(this.map_, 'zoom_changed', function() {
-    that.resetViewport();
+    if (this.prevZoom_ != that.map_.getZoom()) {
+      this.prevZoom_ = that.map_.getZoom();
+      that.resetViewport();
+    }
   });
 
   google.maps.event.addListener(this.map_, 'bounds_changed', function() {
