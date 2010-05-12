@@ -835,7 +835,7 @@ ClusterIcon.prototype.onAdd = function() {
  * @private
  */
 ClusterIcon.prototype.getPosFromLatLng_ = function(latlng) {
-  var pos = this.projection.fromLatLngToDivPixel(latlng);
+  var pos = this.getProjection().fromLatLngToDivPixel(latlng);
   pos.x -= parseInt(this.width_ / 2, 10);
   pos.y -= parseInt(this.height_ / 2, 10);
   return pos;
