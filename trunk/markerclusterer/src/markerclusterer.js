@@ -83,12 +83,18 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.setMap(map);
 
   this.prevZoom_ = this.map_.getZoom();
-
+    
   // Add the map event listeners
   var that = this;
   google.maps.event.addListener(this.map_, 'zoom_changed', function() {
-    if (this.prevZoom_ != that.map_.getZoom()) {
-      this.prevZoom_ = that.map_.getZoom();
+  	var maxZoom = that.map_.mapTypes[that.map_.getMapTypeId()].maxZoom;
+  	var zoom = that.map_.getZoom();
+  	if (zoom < 0 || zoom > maxZoom) {
+  	  return;
+  	}
+  	
+    if (that.prevZoom_ != zoom) {
+      that.prevZoom_ = that.map_.getZoom();
       that.resetViewport();
     }
   });
