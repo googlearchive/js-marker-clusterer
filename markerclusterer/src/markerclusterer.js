@@ -83,23 +83,23 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.setMap(map);
 
   this.prevZoom_ = this.map_.getZoom();
-    
+
   // Add the map event listeners
   var that = this;
   google.maps.event.addListener(this.map_, 'zoom_changed', function() {
-  	var maxZoom = that.map_.mapTypes[that.map_.getMapTypeId()].maxZoom;
-  	var zoom = that.map_.getZoom();
-  	if (zoom < 0 || zoom > maxZoom) {
-  	  return;
-  	}
-  	
+    var maxZoom = that.map_.mapTypes[that.map_.getMapTypeId()].maxZoom;
+    var zoom = that.map_.getZoom();
+    if (zoom < 0 || zoom > maxZoom) {
+      return;
+    }
+
     if (that.prevZoom_ != zoom) {
       that.prevZoom_ = that.map_.getZoom();
       that.resetViewport();
     }
   });
 
-  google.maps.event.addListener(this.map_, 'bounds_changed', function() {
+  google.maps.event.addListener(this.map_, 'idle', function() {
     that.redraw();
   });
 
@@ -932,12 +932,12 @@ ClusterIcon.prototype.useStyle = function() {
   var index = Math.max(0, this.sums_.index - 1);
   index = Math.min(this.styles_.length - 1, index);
   var style = this.styles_[index];
-  this.url_ = style.url;
-  this.height_ = style.height;
-  this.width_ = style.width;
-  this.textColor_ = style.opt_textColor;
-  this.anchor = style.opt_anchor;
-  this.textSize_ = style.opt_textSize;
+  this.url_ = style['url'];
+  this.height_ = style['height'];
+  this.width_ = style['width'];
+  this.textColor_ = style['opt_textColor'];
+  this.anchor = style['opt_anchor'];
+  this.textSize_ = style['opt_textSize'];
 };
 
 
