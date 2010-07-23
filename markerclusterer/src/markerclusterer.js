@@ -1,6 +1,6 @@
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
-// @externs_url http://closure-compiler.googlecode.com/svn/trunk/contrib/externs/google_maps_api_v3.js
+// @externs_url http://closure-compiler.googlecode.com/svn/trunk/contrib/externs/maps/google_maps_api_v3.js
 // ==/ClosureCompiler==
 
 /**
@@ -43,6 +43,8 @@
  *                cluster.
  *     'zoomOnClick': (boolean) Whether the default behaviour of clicking on a
  *                    cluster is to zoom into it.
+ *     'averageCenter': (boolean) Wether the center of each cluster should be
+ *                      the average of all markers in the cluster.
  *     'styles': (object) An object that has style properties:
  *       'url': (string) The image url.
  *       'height': (number) The image height.
@@ -77,6 +79,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.imageExtension_ = options['imageExtension'] ||
       this.MARKER_CLUSTER_IMAGE_EXTENSION_;
   this.zoomOnClick_ = options['zoomOnClick'] || true;
+  this.averageCenter_ = options['averageCenter'] || false;
 
   this.setupStyles_();
 
@@ -214,6 +217,15 @@ MarkerClusterer.prototype.getStyles = function() {
  */
 MarkerClusterer.prototype.isZoomOnClick = function() {
   return this.zoomOnClick_;
+};
+
+/**
+ * Whether average center is set.
+ *
+ * @return {boolean} True if averageCenter_ is set.
+ */
+MarkerClusterer.prototype.isAverageCenter = function() {
+  return this.averageCenter_;
 };
 
 
@@ -596,13 +608,13 @@ function Cluster(markerClusterer) {
   this.markerClusterer_ = markerClusterer;
   this.map_ = markerClusterer.getMap();
   this.gridSize_ = markerClusterer.getGridSize();
+  this.averageCenter_ = markerClusterer.isAverageCenter();
   this.center_ = null;
   this.markers_ = [];
   this.bounds_ = null;
   this.clusterIcon_ = new ClusterIcon(this, markerClusterer.getStyles(),
       markerClusterer.getGridSize());
 }
-
 
 /**
  * Determins if a marker is already added to the cluster.
@@ -638,7 +650,15 @@ Cluster.prototype.addMarker = function(marker) {
   if (!this.center_) {
     this.center_ = marker.getPosition();
     this.calculateBounds_();
+  } else {
+    if (this.averageCenter_) {
+      var lat = (this.center_.lat() + marker.getPosition().lat()) / 2;
+      var lng = (this.center_.lng() + marker.getPosition().lng()) / 2;
+      this.center_ = new google.maps.LatLng(lat, lng);
+      this.calculateBounds_();
+    }
   }
+
 
   if (this.markers_.length == 0) {
     // Only 1 marker in this cluster so show the marker.
@@ -684,7 +704,28 @@ Cluster.prototype.getBounds = function() {
  */
 Cluster.prototype.remove = function() {
   this.clusterIcon_.remove();
+  this.markers_.length = 0;
   delete this.markers_;
+};
+
+
+/**
+ * Returns the center of the cluster.
+ *
+ * @return {number} The cluster center.
+ */
+Cluster.prototype.getSize = function() {
+  return this.markers_.length;
+};
+
+
+/**
+ * Returns the center of the cluster.
+ *
+ * @return {Array.<google.maps.Marker>} The cluster center.
+ */
+Cluster.prototype.getMarkers = function() {
+  return this.markers_;
 };
 
 
@@ -799,7 +840,7 @@ ClusterIcon.prototype.triggerClusterClick = function() {
   var markerClusterer = this.cluster_.getMarkerClusterer();
 
   // Trigger the clusterclick event.
-  google.maps.event.trigger(markerClusterer, 'clusterclick', [this.cluster_]);
+  google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
 
   if (markerClusterer.isZoomOnClick()) {
     // Center the map on this cluster.
@@ -1029,6 +1070,10 @@ MarkerClusterer.prototype['setGridSize'] =
 MarkerClusterer.prototype['onAdd'] = MarkerClusterer.prototype.onAdd;
 MarkerClusterer.prototype['draw'] = MarkerClusterer.prototype.draw;
 MarkerClusterer.prototype['idle'] = MarkerClusterer.prototype.idle;
+
+Cluster.prototype['getCenter'] = Cluster.prototype.getCenter;
+Cluster.prototype['getSize'] = Cluster.prototype.getSize;
+Cluster.prototype['getMarkers'] = Cluster.prototype.getMarkers;
 
 ClusterIcon.prototype['onAdd'] = ClusterIcon.prototype.onAdd;
 ClusterIcon.prototype['draw'] = ClusterIcon.prototype.draw;
