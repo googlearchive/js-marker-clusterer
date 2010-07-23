@@ -63,28 +63,89 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   // there is no point going ahead :)
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
+
+  /**
+   * @type {Array.<google.maps.Marker>}
+   * @private
+   */
   this.markers_ = [];
+
+  /**
+   *  @type {Array.<Cluster>}
+   */
   this.clusters_ = [];
+
   this.sizes = [53, 56, 66, 78, 90];
+
+  /**
+   * @private
+   */
   this.styles_ = [];
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.ready_ = false;
 
   var options = opt_options || {};
 
+  /**
+   * @type {number}
+   * @private
+   */
   this.gridSize_ = options['gridSize'] || 60;
+
+  /**
+   * @type {?number}
+   * @private
+   */
   this.maxZoom_ = options['maxZoom'] || null;
+
   this.styles_ = options['styles'] || [];
+
+  /**
+   * @type {string}
+   * @private
+   */
   this.imagePath_ = options['imagePath'] ||
       this.MARKER_CLUSTER_IMAGE_PATH_;
+
+  /**
+   * @type {string}
+   * @private
+   */
   this.imageExtension_ = options['imageExtension'] ||
       this.MARKER_CLUSTER_IMAGE_EXTENSION_;
-  this.zoomOnClick_ = options['zoomOnClick'] || true;
-  this.averageCenter_ = options['averageCenter'] || false;
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.zoomOnClick_ = true;
+
+  if (options['zoomOnClick'] != undefined) {
+    this.zoomOnClick_ = options['zoomOnClick'];
+  }
+
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.averageCenter_ = false;
+
+  if (options['averageCenter'] != undefined) {
+    this.averageCenter_ = options['averageCenter'];
+  }
 
   this.setupStyles_();
 
   this.setMap(map);
 
+  /**
+   * @type {number}
+   * @private
+   */
   this.prevZoom_ = this.map_.getZoom();
 
   // Add the map event listeners
@@ -180,6 +241,10 @@ MarkerClusterer.prototype.draw = function() {};
  * @private
  */
 MarkerClusterer.prototype.setupStyles_ = function() {
+  if (this.styles_.length) {
+    return;
+  }
+
   for (var i = 0, size; size = this.sizes[i]; i++) {
     this.styles_.push({
       url: this.imagePath_ + (i + 1) + '.' + this.imageExtension_,
@@ -976,9 +1041,9 @@ ClusterIcon.prototype.useStyle = function() {
   this.url_ = style['url'];
   this.height_ = style['height'];
   this.width_ = style['width'];
-  this.textColor_ = style['opt_textColor'];
-  this.anchor = style['opt_anchor'];
-  this.textSize_ = style['opt_textSize'];
+  this.textColor_ = style['textColor'];
+  this.anchor = style['anchor'];
+  this.textSize_ = style['textSize'];
 };
 
 
