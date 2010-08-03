@@ -225,13 +225,6 @@ MarkerClusterer.prototype.onAdd = function() {
  * Implementation of the interface.
  * @ignore
  */
-MarkerClusterer.prototype.idle = function() {};
-
-
-/**
- * Implementation of the interface.
- * @ignore
- */
 MarkerClusterer.prototype.draw = function() {};
 
 
@@ -1134,7 +1127,6 @@ MarkerClusterer.prototype['setGridSize'] =
     MarkerClusterer.prototype.setGridSize;
 MarkerClusterer.prototype['onAdd'] = MarkerClusterer.prototype.onAdd;
 MarkerClusterer.prototype['draw'] = MarkerClusterer.prototype.draw;
-MarkerClusterer.prototype['idle'] = MarkerClusterer.prototype.idle;
 
 Cluster.prototype['getCenter'] = Cluster.prototype.getCenter;
 Cluster.prototype['getSize'] = Cluster.prototype.getSize;
