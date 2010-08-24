@@ -220,13 +220,11 @@ MarkerClusterer.prototype.onAdd = function() {
   this.setReady_(true);
 };
 
-
 /**
- * Implementation of the interface.
+ * Implementaion of the interface method.
  * @ignore
  */
 MarkerClusterer.prototype.draw = function() {};
-
 
 /**
  * Sets up the styles object.
