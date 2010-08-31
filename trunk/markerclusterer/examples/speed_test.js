@@ -95,7 +95,12 @@ speedTest.showMarkers = function() {
 
 speedTest.markerClickFunction = function(pic, latlng) {
   return function(e) {
-    e.preventDefault();
+    e.cancelBubble = true;
+    e.returnValue = false;
+    if (e.stopPropagation) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     var title = pic.photo_title;
     var url = pic.photo_url;
     var fileurl = pic.photo_file_url;
