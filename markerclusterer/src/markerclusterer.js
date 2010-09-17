@@ -1033,7 +1033,7 @@ ClusterIcon.prototype.useStyle = function() {
   this.height_ = style['height'];
   this.width_ = style['width'];
   this.textColor_ = style['textColor'];
-  this.anchor = style['anchor'];
+  this.anchor_ = style['anchor'];
   this.textSize_ = style['textSize'];
 };
 
