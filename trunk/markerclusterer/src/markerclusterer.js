@@ -204,7 +204,7 @@ MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_EXTENSION_ = 'png';
  */
 MarkerClusterer.prototype.extend = function(obj1, obj2) {
   return (function(object) {
-    for (property in object.prototype) {
+    for (var property in object.prototype) {
       this.prototype[property] = object.prototype[property];
     }
     return this;
