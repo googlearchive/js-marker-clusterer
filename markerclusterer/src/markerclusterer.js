@@ -35,9 +35,9 @@
  * A Marker Clusterer that clusters markers.
  *
  * @param {google.maps.Map} map The Google map to attach to.
- * @param {Array.<google.maps.Marker>} opt_markers Optional markers to add to
+ * @param {Array.<google.maps.Marker>=} opt_markers Optional markers to add to
  *   the cluster.
- * @param {Object} opt_options support the following options:
+ * @param {Object=} opt_options support the following options:
  *     'gridSize': (number) The grid size of a cluster in pixels.
  *     'maxZoom': (number) The maximum zoom level that a marker can be part of a
  *                cluster.
@@ -52,6 +52,7 @@
  *       'anchor': (Array) The anchor position of the label text.
  *       'textColor': (string) The text color.
  *       'textSize': (number) The text size.
+ *       'backgroundPosition': (string) The position of the backgound x, y.
  * @constructor
  * @extends google.maps.OverlayView
  */
@@ -296,12 +297,12 @@ MarkerClusterer.prototype.getMarkers = function() {
 
 
 /**
- *  Returns the array of markers in the clusterer.
+ *  Returns the number of markers in the clusterer
  *
- *  @return {Array.<google.maps.Marker>} The number of markers.
+ *  @return {Number} The number of markers.
  */
 MarkerClusterer.prototype.getTotalMarkers = function() {
-  return this.markers_;
+  return this.markers_.length;
 };
 
 
@@ -377,7 +378,7 @@ MarkerClusterer.prototype.getCalculator = function() {
  * Add an array of markers to the clusterer.
  *
  * @param {Array.<google.maps.Marker>} markers The markers to add.
- * @param {boolean} opt_nodraw Whether to redraw the clusters.
+ * @param {boolean=} opt_nodraw Whether to redraw the clusters.
  */
 MarkerClusterer.prototype.addMarkers = function(markers, opt_nodraw) {
   for (var i = 0, marker; marker = markers[i]; i++) {
@@ -417,7 +418,7 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
  * Adds a marker to the clusterer and redraws if needed.
  *
  * @param {google.maps.Marker} marker The marker to add.
- * @param {boolean} opt_nodraw Whether to redraw the clusters.
+ * @param {boolean=} opt_nodraw Whether to redraw the clusters.
  */
 MarkerClusterer.prototype.addMarker = function(marker, opt_nodraw) {
   this.pushMarkerTo_(marker);
@@ -428,12 +429,13 @@ MarkerClusterer.prototype.addMarker = function(marker, opt_nodraw) {
 
 
 /**
- * Remove a marker from the cluster.
+ * Removes a marker and returns true if removed, false if not
  *
- * @param {google.maps.Marker} marker The marker to remove.
- * @return {boolean} True if the marker was removed.
+ * @param {google.maps.Marker} marker The marker to remove
+ * @return {boolean} Whether the marker was removed or not
+ * @private
  */
-MarkerClusterer.prototype.removeMarker = function(marker) {
+MarkerClusterer.prototype.removeMarker_ = function(marker) {
   var index = -1;
   if (this.markers_.indexOf) {
     index = this.markers_.indexOf(marker);
@@ -441,7 +443,7 @@ MarkerClusterer.prototype.removeMarker = function(marker) {
     for (var i = 0, m; m = this.markers_[i]; i++) {
       if (m == marker) {
         index = i;
-        continue;
+        break;
       }
     }
   }
@@ -455,9 +457,48 @@ MarkerClusterer.prototype.removeMarker = function(marker) {
   marker.setVisible(false);
   marker.setMap(null);
 
-  this.resetViewport();
-  this.redraw();
   return true;
+};
+
+
+/**
+ * Remove a marker from the cluster.
+ *
+ * @param {google.maps.Marker} marker The marker to remove.
+ * @param {boolean=} opt_nodraw Optional boolean to force no redraw.
+ * @return {boolean} True if the marker was removed.
+ */
+MarkerClusterer.prototype.removeMarker = function(marker, opt_nodraw) {
+  var removed = this.removeMarker_(marker);
+
+  if (!opt_nodraw && removed) {
+    this.resetViewport();
+    this.redraw();
+    return true;
+  } else {
+   return false;
+  }
+};
+
+
+/**
+ * Removes an array of markers from the cluster.
+ *
+ * @param {Array.<google.maps.Marker>} markers The markers to remove.
+ * @param {boolean=} opt_nodraw Optional boolean to force no redraw.
+ */
+MarkerClusterer.prototype.removeMarkers = function(markers, opt_nodraw) {
+  var removed = false;
+
+  for (var i = 0, marker; marker = markers[i]; i++) {
+    removed = removed || this.removeMarker_(marker);
+  }
+
+  if (!opt_nodraw && removed) {
+    this.resetViewport();
+    this.redraw();
+    return true;
+  }
 };
 
 
@@ -868,7 +909,8 @@ Cluster.prototype.updateIcon = function() {
  *     'anchor': (Array) The anchor position of the label text.
  *     'textColor': (string) The text color.
  *     'textSize': (number) The text size.
- * @param {number} opt_padding Optional padding to apply to the cluster icon.
+ *     'backgroundPosition: (string) The background postition x, y.
+ * @param {number=} opt_padding Optional padding to apply to the cluster icon.
  * @constructor
  * @extends google.maps.OverlayView
  * @ignore
@@ -1035,6 +1077,7 @@ ClusterIcon.prototype.useStyle = function() {
   this.textColor_ = style['textColor'];
   this.anchor_ = style['anchor'];
   this.textSize_ = style['textSize'];
+  this.backgroundPosition_ = style['backgroundPosition'];
 };
 
 
@@ -1060,7 +1103,9 @@ ClusterIcon.prototype.createCss = function(pos) {
     style.push('filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
         'sizingMethod=scale,src="' + this.url_ + '");');
   } else {
-    style.push('background:url(' + this.url_ + ');');
+    style.push('background-image:url(' + this.url_ + ');');
+    var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
+    style.push('background-position:' + backgroundPosition + ';');
   }
 
   if (typeof this.anchor_ === 'object') {
@@ -1117,6 +1162,8 @@ MarkerClusterer.prototype['getTotalMarkers'] =
 MarkerClusterer.prototype['redraw'] = MarkerClusterer.prototype.redraw;
 MarkerClusterer.prototype['removeMarker'] =
     MarkerClusterer.prototype.removeMarker;
+MarkerClusterer.prototype['removeMarkers'] =
+    MarkerClusterer.prototype.removeMarkers;
 MarkerClusterer.prototype['resetViewport'] =
     MarkerClusterer.prototype.resetViewport;
 MarkerClusterer.prototype['setCalculator'] =
