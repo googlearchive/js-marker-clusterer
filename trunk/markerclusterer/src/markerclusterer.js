@@ -491,7 +491,8 @@ MarkerClusterer.prototype.removeMarkers = function(markers, opt_nodraw) {
   var removed = false;
 
   for (var i = 0, marker; marker = markers[i]; i++) {
-    removed = removed || this.removeMarker_(marker);
+    var r = this.removeMarker_(marker);
+    removed = removed || r;
   }
 
   if (!opt_nodraw && removed) {
@@ -1151,6 +1152,8 @@ MarkerClusterer.prototype['getCalculator'] =
     MarkerClusterer.prototype.getCalculator;
 MarkerClusterer.prototype['getGridSize'] =
     MarkerClusterer.prototype.getGridSize;
+MarkerClusterer.prototype['getExtendedBounds'] =
+    MarkerClusterer.prototype.getExtendedBounds;
 MarkerClusterer.prototype['getMap'] = MarkerClusterer.prototype.getMap;
 MarkerClusterer.prototype['getMarkers'] = MarkerClusterer.prototype.getMarkers;
 MarkerClusterer.prototype['getMaxZoom'] = MarkerClusterer.prototype.getMaxZoom;
