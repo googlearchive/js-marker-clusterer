@@ -750,8 +750,11 @@ Cluster.prototype.addMarker = function(marker) {
     this.calculateBounds_();
   } else {
     if (this.averageCenter_) {
-      var lat = (this.center_.lat() + marker.getPosition().lat()) / 2;
-      var lng = (this.center_.lng() + marker.getPosition().lng()) / 2;
+      var l = this.markers_.length + 1;
+      var latDiff = (this.center_.lat() - marker.getPosition().lat()) / l;
+      var lngDiff = (this.center_.lng() - marker.getPosition().lng()) / l;
+      var lat = this.center_.lat() + latDiff;
+      var lng = this.center_.lng() + lngDiff;
       this.center_ = new google.maps.LatLng(lat, lng);
       this.calculateBounds_();
     }
