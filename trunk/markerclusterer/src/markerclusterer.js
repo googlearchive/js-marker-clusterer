@@ -656,6 +656,63 @@ MarkerClusterer.prototype.redraw = function() {
 
 
 /**
+ * Calculates the distance between two latlng locations in km.
+ * @see http://www.movable-type.co.uk/scripts/latlong.html
+ *
+ * @param {google.maps.LatLng} p1 The first lat lng point.
+ * @param {google.maps.LatLng} p2 The second lat lng point.
+ * @return {number} The distance between the two points in km.
+ * @private
+*/
+MarkerClusterer.prototype.distanceBetweenPoints_ = function(p1, p2) {
+  if (!p1 || !p2) {
+    return 0;
+  }
+
+  var R = 6371; // Radius of the Earth in km
+  var dLat = (p2.lat() - p1.lat()) * Math.PI / 180;
+  var dLon = (p2.lng() - p1.lng()) * Math.PI / 180;
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d;
+};
+
+
+/**
+ * Add a marker to a cluster, or creates a new cluster.
+ *
+ * @param {google.maps.Marker} marker The marker to add.
+ * @private
+ */
+MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
+  var distance = 40000; // Some large number
+  var clusterToAddTo = null;
+  var pos = marker.getPosition();
+  for (var i = 0, cluster; cluster = this.clusters_[i]; i++) {
+    var center = cluster.getCenter();
+    if (center) {
+      var d = this.distanceBetweenPoints_(center, marker.getPosition());
+      if (d < distance) {
+        distance = d;
+        clusterToAddTo = cluster;
+      }
+    }
+  }
+
+  if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
+    clusterToAddTo.addMarker(marker);
+  } else {
+    var cluster = new Cluster(this);
+    cluster.addMarker(marker);
+    this.clusters_.push(cluster);
+  }
+};
+
+
+/**
  * Creates the clusters.
  *
  * @private
@@ -672,23 +729,8 @@ MarkerClusterer.prototype.createClusters_ = function() {
   var bounds = this.getExtendedBounds(mapBounds);
 
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
-    var added = false;
     if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
-      for (var j = 0, cluster; cluster = this.clusters_[j]; j++) {
-        if (!added && cluster.getCenter() &&
-            cluster.isMarkerInClusterBounds(marker)) {
-          added = true;
-          cluster.addMarker(marker);
-          break;
-        }
-      }
-
-      if (!added) {
-        // Create a new cluster.
-        var cluster = new Cluster(this);
-        cluster.addMarker(marker);
-        this.clusters_.push(cluster);
-      }
+      this.addToClosestCluster_(marker);
     }
   }
 };
