@@ -793,10 +793,8 @@ Cluster.prototype.addMarker = function(marker) {
   } else {
     if (this.averageCenter_) {
       var l = this.markers_.length + 1;
-      var latDiff = (this.center_.lat() - marker.getPosition().lat()) / l;
-      var lngDiff = (this.center_.lng() - marker.getPosition().lng()) / l;
-      var lat = this.center_.lat() + latDiff;
-      var lng = this.center_.lng() + lngDiff;
+      var lat = (this.center_.lat() * (l-1) + marker.getPosition().lat()) / l;
+      var lng = (this.center_.lng() * (l-1) + marker.getPosition().lng()) / l;
       this.center_ = new google.maps.LatLng(lat, lng);
       this.calculateBounds_();
     }
