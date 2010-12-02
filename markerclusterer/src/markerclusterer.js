@@ -835,8 +835,12 @@ Cluster.prototype.getMarkerClusterer = function() {
  * @return {google.maps.LatLngBounds} the cluster bounds.
  */
 Cluster.prototype.getBounds = function() {
-  this.calculateBounds_();
-  return this.bounds_;
+  var bounds = new google.maps.LatLngBounds(this.center_, this.center_);
+  var markers = this.getMarkers();
+  for (var i = 0, marker; marker = markers[i]; i++) {
+    bounds.extend(marker.getPosition());
+  }
+  return bounds;
 };
 
 
@@ -881,7 +885,7 @@ Cluster.prototype.getCenter = function() {
 
 
 /**
- * Calculated the bounds of the cluster with the grid.
+ * Calculated the extended bounds of the cluster with the grid.
  *
  * @private
  */
@@ -985,9 +989,6 @@ ClusterIcon.prototype.triggerClusterClick = function() {
   google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
 
   if (markerClusterer.isZoomOnClick()) {
-    // Center the map on this cluster.
-    this.map_.panTo(this.cluster_.getCenter());
-
     // Zoom into the cluster.
     this.map_.fitBounds(this.cluster_.getBounds());
   }
