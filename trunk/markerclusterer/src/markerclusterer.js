@@ -629,7 +629,7 @@ MarkerClusterer.prototype.isMarkerInBounds_ = function(marker, bounds) {
  * Clears all clusters and markers from the clusterer.
  */
 MarkerClusterer.prototype.clearMarkers = function() {
-  this.resetViewport();
+  this.resetViewport(true);
 
   // Set the markers a empty array.
   this.markers_ = [];
@@ -638,8 +638,9 @@ MarkerClusterer.prototype.clearMarkers = function() {
 
 /**
  * Clears all existing clusters and recreates them.
+ * @param {boolean} opt_hide To also hide the marker.
  */
-MarkerClusterer.prototype.resetViewport = function() {
+MarkerClusterer.prototype.resetViewport = function(opt_hide) {
   // Remove all the clusters
   for (var i = 0, cluster; cluster = this.clusters_[i]; i++) {
     cluster.remove();
@@ -648,6 +649,9 @@ MarkerClusterer.prototype.resetViewport = function() {
   // Reset the markers to not be added and to be invisible.
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
     marker.isAdded = false;
+    if (opt_hide) {
+      marker.setMap(null);
+    }
   }
 
   this.clusters_ = [];
@@ -829,19 +833,16 @@ Cluster.prototype.addMarker = function(marker) {
     // Only 1 marker in this cluster so show the marker.
     // Avoid a flicker by checking the map first.
     marker.setMap(this.map_);
-    marker.setVisible(true);
   }
 
   if (this.markers_.length > 0) {
     if (this.markers_.length == 1) {
       // Hide the 1 marker that was showing.
       this.markers_[0].setMap(null);
-      this.markers_[0].setVisible(false);
     }
 
     // Hide this marker.
     marker.setMap(null);
-    marker.setVisible(false);
   }
 
   marker.isAdded = true;
@@ -960,7 +961,6 @@ Cluster.prototype.updateIcon = function() {
     // The zoom is greater than our max zoom so show all the markers in cluster.
     for (var i = 0, marker; marker = this.markers_[i]; i++) {
       marker.setMap(this.map_);
-      marker.setVisible(true);
     }
     return;
   }
