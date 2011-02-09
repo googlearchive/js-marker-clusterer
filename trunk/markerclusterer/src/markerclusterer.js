@@ -417,8 +417,7 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
     var that = this;
     google.maps.event.addListener(marker, 'dragend', function() {
       marker.isAdded = false;
-      that.resetViewport();
-      that.redraw();
+      that.repaint();
     });
   }
   this.markers_.push(marker);
