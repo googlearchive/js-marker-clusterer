@@ -246,6 +246,19 @@ MarkerClusterer.prototype.setupStyles_ = function() {
   }
 };
 
+/**
+ *  Fit the map to the bounds of the markers in the clusterer.
+ */
+MarkerClusterer.prototype.fitMapToMarkers = function() {
+  var markers = this.getMarkers();
+  var bounds = new google.maps.LatLngBounds();
+  for (var i = 0, marker; marker = markers[i]; i++) {
+    bounds.extend(marker.getPosition());
+  }
+
+  this.map_.fitBounds(bounds);
+};
+
 
 /**
  *  Sets the styles.
@@ -397,8 +410,6 @@ MarkerClusterer.prototype.addMarkers = function(markers, opt_nodraw) {
  * @private
  */
 MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
-  marker.setVisible(false);
-  marker.setMap(null);
   marker.isAdded = false;
   if (marker['draggable']) {
     // If the marker is draggable add a listener so we update the clusters on
@@ -454,8 +465,6 @@ MarkerClusterer.prototype.removeMarker_ = function(marker) {
   }
 
   this.markers_.splice(index, 1);
-  marker.setVisible(false);
-  marker.setMap(null);
 
   return true;
 };
@@ -639,11 +648,27 @@ MarkerClusterer.prototype.resetViewport = function() {
   // Reset the markers to not be added and to be invisible.
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
     marker.isAdded = false;
-    marker.setMap(null);
-    marker.setVisible(false);
   }
 
   this.clusters_ = [];
+};
+
+/**
+ *
+ */
+MarkerClusterer.prototype.repaint = function() {
+  var oldClusters = this.clusters_.slice();
+  this.clusters_.length = 0;
+  this.resetViewport();
+  this.redraw();
+
+  // Remove the old clusters.
+  // Do it in a timeout so the other clusters have been drawn first.
+  window.setTimeout(function() {
+    for (var i = 0, cluster; cluster = oldClusters[i]; i++) {
+      cluster.remove();
+    }
+  }, 0);
 };
 
 
@@ -800,15 +825,23 @@ Cluster.prototype.addMarker = function(marker) {
     }
   }
 
-
-  if (this.markers_.length == 0) {
+  if (this.markers_.length == 0 && marker.getMap() != this.map_) {
     // Only 1 marker in this cluster so show the marker.
+    // Avoid a flicker by checking the map first.
     marker.setMap(this.map_);
     marker.setVisible(true);
-  } else if (this.markers_.length == 1) {
-    // Hide the 1 marker that was showing.
-    this.markers_[0].setMap(null);
-    this.markers_[0].setVisible(false);
+  }
+
+  if (this.markers_.length > 0) {
+    if (this.markers_.length == 1) {
+      // Hide the 1 marker that was showing.
+      this.markers_[0].setMap(null);
+      this.markers_[0].setVisible(false);
+    }
+
+    // Hide this marker.
+    marker.setMap(null);
+    marker.setVisible(false);
   }
 
   marker.isAdded = true;
@@ -1192,6 +1225,8 @@ MarkerClusterer.prototype['addMarker'] = MarkerClusterer.prototype.addMarker;
 MarkerClusterer.prototype['addMarkers'] = MarkerClusterer.prototype.addMarkers;
 MarkerClusterer.prototype['clearMarkers'] =
     MarkerClusterer.prototype.clearMarkers;
+MarkerClusterer.prototype['fitMapToMarkers'] =
+    MarkerClusterer.prototype.fitMapToMarkers;
 MarkerClusterer.prototype['getCalculator'] =
     MarkerClusterer.prototype.getCalculator;
 MarkerClusterer.prototype['getGridSize'] =
@@ -1213,6 +1248,8 @@ MarkerClusterer.prototype['removeMarkers'] =
     MarkerClusterer.prototype.removeMarkers;
 MarkerClusterer.prototype['resetViewport'] =
     MarkerClusterer.prototype.resetViewport;
+MarkerClusterer.prototype['repaint'] =
+    MarkerClusterer.prototype.repaint;
 MarkerClusterer.prototype['setCalculator'] =
     MarkerClusterer.prototype.setCalculator;
 MarkerClusterer.prototype['setGridSize'] =
