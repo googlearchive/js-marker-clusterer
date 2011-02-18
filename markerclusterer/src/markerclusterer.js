@@ -1070,7 +1070,7 @@ ClusterIcon.prototype.onAdd = function() {
   }
 
   var panes = this.getPanes();
-  panes.overlayImage.appendChild(this.div_);
+  panes.overlayMouseTarget.appendChild(this.div_);
 
   var that = this;
   google.maps.event.addDomListener(this.div_, 'click', function() {
