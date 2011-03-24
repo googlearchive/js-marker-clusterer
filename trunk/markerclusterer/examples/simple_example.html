@@ -30,7 +30,7 @@
 
     </style>
 
-    <script src="http://www.google.com/jsapi"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="../src/data.json"></script>
     <script type="text/javascript">
       var script = '<script type="text/javascript" src="../src/markerclusterer';
@@ -45,11 +45,6 @@
     </script>
 
     <script type="text/javascript">
-      google.load('maps', '3', {
-        other_params: 'sensor=false'
-      });
-      google.setOnLoadCallback(initialize);
-
       function initialize() {
         var center = new google.maps.LatLng(37.4419, -122.1419);
 
@@ -60,7 +55,8 @@
         });
 
         var markers = [];
-        for (var i = 0, dataPhoto; dataPhoto = data.photos[i]; i++) {
+        for (var i = 0; i < 100; i++) {
+          var dataPhoto = data.photos[i];
           var latLng = new google.maps.LatLng(dataPhoto.latitude,
               dataPhoto.longitude);
           var marker = new google.maps.Marker({
@@ -70,6 +66,7 @@
         }
         var markerCluster = new MarkerClusterer(map, markers);
       }
+      google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>
   <body>
