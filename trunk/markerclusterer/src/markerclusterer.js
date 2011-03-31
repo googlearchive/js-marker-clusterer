@@ -1206,14 +1206,9 @@ ClusterIcon.prototype.setCenter = function(center) {
  */
 ClusterIcon.prototype.createCss = function(pos) {
   var style = [];
-  if (document.all) {
-    style.push('filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
-        'sizingMethod=scale,src="' + this.url_ + '");');
-  } else {
-    style.push('background-image:url(' + this.url_ + ');');
-    var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
-    style.push('background-position:' + backgroundPosition + ';');
-  }
+  style.push('background-image:url(' + this.url_ + ');');
+  var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
+  style.push('background-position:' + backgroundPosition + ';');
 
   if (typeof this.anchor_ === 'object') {
     if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
@@ -1283,6 +1278,8 @@ MarkerClusterer.prototype['setCalculator'] =
     MarkerClusterer.prototype.setCalculator;
 MarkerClusterer.prototype['setGridSize'] =
     MarkerClusterer.prototype.setGridSize;
+MarkerClusterer.prototype['setMaxZoom'] =
+    MarkerClusterer.prototype.setMaxZoom;
 MarkerClusterer.prototype['onAdd'] = MarkerClusterer.prototype.onAdd;
 MarkerClusterer.prototype['draw'] = MarkerClusterer.prototype.draw;
 

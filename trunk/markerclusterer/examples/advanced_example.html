@@ -46,9 +46,6 @@
     <script src="../src/data.json" type="text/javascript"></script>
     <script type="text/javascript">
       var script = '<script type="text/javascript" src="../src/markerclusterer';
-      if (document.location.search.indexOf('packed') !== -1) {
-        script += '_packed';
-      }
       if (document.location.search.indexOf('compiled') !== -1) {
         script += '_compiled';
       }
@@ -193,7 +190,6 @@
     <h3>An example of MarkerClusterer v3</h3>
     <p>
       <a href="?compiled">Compiled</a> |
-      <a href="?packed">Packed</a> |
       <a href="?">Standard</a> version of the script.
     </p>
     <div id="map-container">
