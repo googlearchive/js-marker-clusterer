@@ -1,6 +1,6 @@
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
-// @externs_url http://closure-compiler.googlecode.com/svn/trunk/contrib/externs/maps/google_maps_api_v3.js
+// @externs_url http://closure-compiler.googlecode.com/svn/trunk/contrib/externs/maps/google_maps_api_v3_3.js
 // ==/ClosureCompiler==
 
 /**
@@ -471,6 +471,8 @@ MarkerClusterer.prototype.removeMarker_ = function(marker) {
     // Marker is not in our list of markers.
     return false;
   }
+
+  marker.setMap(null);
 
   this.markers_.splice(index, 1);
 
