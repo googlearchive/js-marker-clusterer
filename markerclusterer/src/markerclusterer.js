@@ -161,14 +161,10 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   // Add the map event listeners
   var that = this;
   google.maps.event.addListener(this.map_, 'zoom_changed', function() {
-    var maxZoom = that.map_.mapTypes[that.map_.getMapTypeId()].maxZoom;
     var zoom = that.map_.getZoom();
-    if (zoom < 0 || zoom > maxZoom) {
-      return;
-    }
 
     if (that.prevZoom_ != zoom) {
-      that.prevZoom_ = that.map_.getZoom();
+      that.prevZoom_ = zoom;
       that.resetViewport();
     }
   });
@@ -344,7 +340,7 @@ MarkerClusterer.prototype.setMaxZoom = function(maxZoom) {
  *  @return {number} The max zoom level.
  */
 MarkerClusterer.prototype.getMaxZoom = function() {
-  return this.maxZoom_ || this.map_.mapTypes[this.map_.getMapTypeId()].maxZoom;
+  return this.maxZoom_;
 };
 
 
@@ -988,7 +984,7 @@ Cluster.prototype.updateIcon = function() {
   var zoom = this.map_.getZoom();
   var mz = this.markerClusterer_.getMaxZoom();
 
-  if (zoom > mz) {
+  if (mz && zoom > mz) {
     // The zoom is greater than our max zoom so show all the markers in cluster.
     for (var i = 0, marker; marker = this.markers_[i]; i++) {
       marker.setMap(this.map_);
