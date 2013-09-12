@@ -5,7 +5,7 @@
 
 /**
  * @name MarkerClusterer for Google Maps v3
- * @version version 1.0
+ * @version version 1.0.1
  * @author Luke Mahe
  * @fileoverview
  * The library creates and manages per-zoom-level clusters for large amounts of
