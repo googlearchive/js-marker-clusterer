@@ -54,8 +54,6 @@
     </script>
 
     <script type="text/javascript">
-      google.maps.event.addListener(window, 'load', initialize);
-
       var styles = [[{
         url: '../images/people35.png',
         height: 35,
@@ -180,10 +178,9 @@
         e.stopPropagation();
         markerClusterer.clearMarkers();
       }
-
     </script>
   </head>
-  <body>
+  <body onload="initialize();">
     <h3>An example of MarkerClusterer v3</h3>
     <p>
       <a href="?compiled">Compiled</a> |

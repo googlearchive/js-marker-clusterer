@@ -91,11 +91,8 @@
       document.write(script);
     </script>
     <script type="text/javascript" src="speed_test.js"></script>
-    <script type="text/javascript">
-      google.maps.event.addListener(window, 'load', speedTest.init);
-    </script>
   </head>
-  <body>
+  <body onload="speedTest.init();">
     <div id="panel">
       <h3>An example of MarkerClusterer v3</h3>
       <p>
