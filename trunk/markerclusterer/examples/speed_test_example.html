@@ -80,7 +80,7 @@
 
     </style>
 
-    <script src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="../src/data.json" type="text/javascript"></script>
     <script type="text/javascript">
       var script = '<script type="text/javascript" src="../src/markerclusterer';
@@ -90,16 +90,9 @@
       script += '.js"><' + '/script>';
       document.write(script);
     </script>
-
     <script type="text/javascript" src="speed_test.js"></script>
-
     <script type="text/javascript">
-      google.load('maps', '3', {
-      	other_params: 'sensor=false'
-      });
-      
-      google.setOnLoadCallback(speedTest.init);
-
+      google.maps.event.addListener(window, 'load', speedTest.init);
     </script>
   </head>
   <body>

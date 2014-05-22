@@ -42,7 +42,7 @@
       }
     </style>
 
-    <script src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="../src/data.json" type="text/javascript"></script>
     <script type="text/javascript">
       var script = '<script type="text/javascript" src="../src/markerclusterer';
@@ -54,11 +54,7 @@
     </script>
 
     <script type="text/javascript">
-      google.load('maps', '3', {
-        other_params: 'sensor=false'
-      });
-
-      google.setOnLoadCallback(initialize);
+      google.maps.event.addListener(window, 'load', initialize);
 
       var styles = [[{
         url: '../images/people35.png',
