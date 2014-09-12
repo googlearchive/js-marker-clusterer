@@ -1,3 +1,5 @@
+## Contributing
+
 Want to help out? That's awesome!
 
 The library is open source and lives on GitHub at:
