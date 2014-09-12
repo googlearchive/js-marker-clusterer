@@ -8,9 +8,9 @@ A Google Maps JavaScript API v3 library to create and manage per-zoom-level clus
 
 Migrated from the [Google Maps JavaScript API utility libraries on Google Code](https://code.google.com/p/google-maps-utility-library-v3/).
 
-## Live Demo
+## Live Demos
 
-[![Marker Clusterer Screenshot](https://googlemaps.github.io/js-marker-clusterer/screenshot.jpg)](https://googlemaps.github.io/js-marker-clusterer/docs/examples.html)
+[![Marker Clusterer Screenshot](https://googlemaps.github.io/js-marker-clusterer/screenshot.png)](https://googlemaps.github.io/js-marker-clusterer/docs/examples.html)
 
 [Examples page](https://googlemaps.github.io/js-marker-clusterer/docs/examples.html)
 
