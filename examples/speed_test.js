@@ -57,7 +57,7 @@ speedTest.showMarkers = function() {
 
   for (var i = 0; i < numMarkers; i++) {
     var titleText = speedTest.pics[i].photo_title;
-    if (titleText == '') {
+    if (titleText === '') {
       titleText = 'No title';
     }
 
