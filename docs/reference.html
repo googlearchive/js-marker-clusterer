@@ -1,10 +1,95 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
     <title>MarkerClusterer for Google Maps v3 version 1.0 Reference</title>
-    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
-    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
+    <style>
+      body {
+        font-family: arial, sans-serif;
+        background-color: #fff;
+        font-size: small;
+        margin: 24px 8px 8px;
+        color: #000;
+      }
+      h1, h2, h3, h4, h5 {
+        font-weight: bold;
+        margin-bottom: 0;
+      }
+      h2, h3, h4, h5 {
+        margin-left: 25px;
+      }
+      h1 {
+        font-size: 130%;
+        margin: 2em 0 0 10px; 
+        padding: 0 3px 0 3px;
+        border-top: 1px solid;
+        background-color: #e5ecf9;
+        border-color: #3366CC;
+      }
+      h2 {
+        font-size: 120%;
+        margin-top: 1.5em;
+        border-bottom: 1px solid;
+        border-color: #3366CC;
+      }
+      h3 {
+        font-size: 110%; 
+        margin-top: 0.7em;
+        position: relative;
+        left: 0;
+        top: 0.7em;
+        z-index: 5; /*to avoid falling behind other elements due to lowered position*/
+      }
+      h4 {
+        margin-top: .5em;
+        font-size: 100%;
+        font-weight: bold;
+        position: relative;
+        left: 0;
+        top: 0.8em;
+        z-index: 5; /*to avoid falling behind other elements due to lowered position*/
+      }
+      h5 {
+        margin-top: 0.4em;
+        font-size: 100%;
+        font-weight: 100;
+        font-style: italic;
+        text-decoration: underline;
+        position: relative;
+        left: 0;
+        top: 0.8em;
+        z-index: 5; /*to avoid falling behind other elements due to lowered position*/
+      }
+      p {
+        margin: 1em 0 0 25px;
+        padding: 0;
+      }
+      table {
+        border: 1px solid;
+        border-color: #3366CC;
+        border-spacing:0;
+        margin: 1em 0 0 26px;
+        border-collapse: collapse;
+        clear: right;
+      }
+      pre {
+        margin-left: 2em;
+      }
+      ol, ul {
+        margin-left: 2em;
+      }
+    </style>
+    <script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-12846745-20']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   </head>
   <body>
     <h1>MarkerClusterer for Google Maps v3</h1>
@@ -13,8 +98,7 @@ The library creates and manages per-zoom-level clusters for large amounts of
 markers.
 <br/>
 This is a v3 implementation of the 
-<a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/"
->v2 MarkerClusterer</a>.</p>
+<a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/">v2 MarkerClusterer</a>.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="MarkerClusterer"></a>class MarkerClusterer</h2>
@@ -265,12 +349,5 @@ This is a v3 implementation of the
             
           </tbody>
         </table>
-      
-    
-    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      _uacct = "UA-964209-4";
-      urchinTracker();
-    </script> 
   </body>
 </html>
