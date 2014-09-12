@@ -16,7 +16,7 @@ Migrated from the [Google Maps JavaScript API utility libraries on Google Code](
 
 ## Contributing
 
-Want to contribute? Check out the [contributing guide!](https://googlemaps.github.io/js-marker-clusterer/CONTRIBUTING)
+Want to contribute? Check out the [contributing guide!](https://googlemaps.github.io/js-marker-clusterer/CONTRIBUTING.md)
 
 ## License
 
