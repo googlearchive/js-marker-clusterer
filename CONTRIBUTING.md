@@ -1,6 +1,7 @@
 ## Contributing
 
 Want to help out? That's awesome!
+![Analytics](https://ga-beacon.appspot.com/UA-12846745-20/js-marker-clusterer/contributing?pixel)
 
 The library is open source and lives on GitHub at:
 https://github.com/googlemaps/js-marker-clusterer
