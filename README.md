@@ -16,7 +16,7 @@ Migrated from the [Google Maps JavaScript API utility libraries on Google Code](
 
 ## Contributing
 
-Want to contribute? Check out the [contributing guide!](CONTRIBUTING.md)
+Want to contribute? Check out the [contributing guide](CONTRIBUTING.md)!
 
 ## License
 
