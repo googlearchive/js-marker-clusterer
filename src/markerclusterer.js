@@ -56,6 +56,7 @@
  *       'textColor': (string) The text color.
  *       'textSize': (number) The text size.
  *       'backgroundPosition': (string) The position of the backgound x, y.
+ *       'iconAnchor': (Array) The anchor position of the icon x, y.
  * @constructor
  * @extends google.maps.OverlayView
  */
@@ -1086,8 +1087,14 @@ ClusterIcon.prototype.onAdd = function() {
  */
 ClusterIcon.prototype.getPosFromLatLng_ = function(latlng) {
   var pos = this.getProjection().fromLatLngToDivPixel(latlng);
-  pos.x -= parseInt(this.width_ / 2, 10);
-  pos.y -= parseInt(this.height_ / 2, 10);
+
+  if (typeof this.iconAnchor_ === 'object' && this.iconAnchor_.length === 2) {
+    pos.x -= this.iconAnchor_[0];
+    pos.y -= this.iconAnchor_[1];
+  } else {
+    pos.x -= parseInt(this.width_ / 2, 10);
+    pos.y -= parseInt(this.height_ / 2, 10);
+  }
   return pos;
 };
 
@@ -1183,6 +1190,7 @@ ClusterIcon.prototype.useStyle = function() {
   this.anchor_ = style['anchor'];
   this.textSize_ = style['textSize'];
   this.backgroundPosition_ = style['backgroundPosition'];
+  this.iconAnchor_ = style['iconAnchor'];
 };
 
 
@@ -1213,6 +1221,10 @@ ClusterIcon.prototype.createCss = function(pos) {
         this.anchor_[0] < this.height_) {
       style.push('height:' + (this.height_ - this.anchor_[0]) +
           'px; padding-top:' + this.anchor_[0] + 'px;');
+    } else if (typeof this.anchor_[0] === 'number' && this.anchor_[0] < 0 &&
+        -this.anchor_[0] < this.height_) {
+      style.push('height:' + this.height_ + 'px; line-height:' + (this.height_ + this.anchor_[0]) +
+          'px;');
     } else {
       style.push('height:' + this.height_ + 'px; line-height:' + this.height_ +
           'px;');
