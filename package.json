@@ -1,0 +1,6 @@
+{
+  "name": "js-marker-clusterer",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/markerclusterer.js"
+}
