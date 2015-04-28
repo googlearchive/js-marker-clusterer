@@ -1042,11 +1042,11 @@ function ClusterIcon(cluster, styles, opt_padding) {
 /**
  * Triggers the clusterclick event and zoom's if the option is set.
  */
-ClusterIcon.prototype.triggerClusterClick = function() {
+ClusterIcon.prototype.triggerClusterClick = function(event) {
   var markerClusterer = this.cluster_.getMarkerClusterer();
 
   // Trigger the clusterclick event.
-  google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
+  google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_, event);
 
   if (markerClusterer.isZoomOnClick()) {
     // Zoom into the cluster.
@@ -1071,8 +1071,8 @@ ClusterIcon.prototype.onAdd = function() {
   panes.overlayMouseTarget.appendChild(this.div_);
 
   var that = this;
-  google.maps.event.addDomListener(this.div_, 'click', function() {
-    that.triggerClusterClick();
+  google.maps.event.addDomListener(this.div_, 'click', function(event) {
+    that.triggerClusterClick(event);
   });
 };
 
