@@ -1231,10 +1231,11 @@ ClusterIcon.prototype.createCss = function(pos) {
 
   var txtColor = this.textColor_ ? this.textColor_ : 'black';
   var txtSize = this.textSize_ ? this.textSize_ : 11;
+  var marginTop = this.marginTop_ ? this.marginTop_ : 0;
 
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
       pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
-      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold; margin-top:' + marginTop + 'px;');
   return style.join('');
 };
 
