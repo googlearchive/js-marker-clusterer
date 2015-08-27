@@ -898,7 +898,8 @@ Cluster.prototype.getMarkerClusterer = function() {
 Cluster.prototype.getBounds = function() {
   var bounds = new google.maps.LatLngBounds(this.center_, this.center_);
   var markers = this.getMarkers();
-  for (var i = 0, marker; marker = markers[i]; i++) {
+  for (var i=markers.length-1; i>=0; i--) {
+    var marker = markers[i];
     bounds.extend(marker.getPosition());
   }
   return bounds;
