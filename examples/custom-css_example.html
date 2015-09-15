@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MarkerClusterer v3 Simple Example</title>
+    <style >
+      body {
+        margin: 0;
+        padding: 10px 20px 20px;
+        font-family: Arial;
+        font-size: 16px;
+      }
+      #map-container {
+        padding: 6px;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #ccc #ccc #999 #ccc;
+        -webkit-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+        -moz-box-shadow: rgba(64, 64, 64, 0.5) 0 2px 5px;
+        box-shadow: rgba(64, 64, 64, 0.1) 0 2px 5px;
+        width: 600px;
+      }
+      #map {
+        width: 600px;
+        height: 400px;
+      }
+      .custom-pin {
+    		height: 4em;
+    		line-height: 4em;
+    		width: 4em;
+    		text-align: center;
+    		cursor: pointer;
+    		color: white;
+    		position: absolute;
+    		font-size: 1em;
+    		font-family: Verdana;
+    		background: url('img/m2.svg') no-repeat 0 0 transparent;
+    	}
+    </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="data.json"></script>
+    <script>
+      var script = '<script type="text/javascript" src="../src/markerclusterer';
+      if (document.location.search.indexOf('compiled') !== -1) {
+        script += '_compiled';
+      }
+      script += '.js"><' + '/script>';
+      document.write(script);
+    </script>
+
+    <script>
+      function initialize() {
+        var center = new google.maps.LatLng(37.4419, -122.1419);
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: center,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var markers = [];
+        for (var i = 0; i < 100; i++) {
+          var dataPhoto = data.photos[i];
+          var latLng = new google.maps.LatLng(dataPhoto.latitude,
+              dataPhoto.longitude);
+          var marker = new google.maps.Marker({
+            position: latLng
+          });
+          markers.push(marker);
+        }
+        var options = {
+          cssClass:'custom-pin'
+        };
+        var markerCluster = new MarkerClusterer(map, markers, options);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-12846745-20']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' === document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <h3>A simple example of MarkerClusterer (100 markers)</h3>
+    <p>
+      <a href="?compiled">Compiled</a> |
+      <a href="?">Standard</a> version of the script.
+    </p>
+    <div id="map-container"><div id="map"></div></div>
+  </body>
+</html>
