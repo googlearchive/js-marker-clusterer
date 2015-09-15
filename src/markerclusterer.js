@@ -55,7 +55,8 @@
  *       'anchor': (Array) The anchor position of the label text.
  *       'textColor': (string) The text color.
  *       'textSize': (number) The text size.
- *       'backgroundPosition': (string) The position of the backgound x, y.
+ *       'backgroundPosition': (string) The position of the background x, y.
+ *     'cssClass': (string) One or more CSS class for styling this marker.
  * @constructor
  * @extends google.maps.OverlayView
  */
@@ -85,6 +86,11 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @private
    */
   this.styles_ = [];
+  
+  /**
+   * @private
+   */
+  this.cssClass_ = '';
 
   /**
    * @type {boolean}
@@ -113,6 +119,8 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.maxZoom_ = options['maxZoom'] || null;
 
   this.styles_ = options['styles'] || [];
+  
+  this.cssClass_ = options['cssClass'] || null;
 
   /**
    * @type {string}
@@ -1065,6 +1073,10 @@ ClusterIcon.prototype.onAdd = function() {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
     this.div_.innerHTML = this.sums_.text;
+	var markerClusterer = this.cluster_.getMarkerClusterer();
+	if (markerClusterer.cssClass_) {
+	  this.div_.className = markerClusterer.cssClass_;
+	}
   }
 
   var panes = this.getPanes();
@@ -1204,37 +1216,42 @@ ClusterIcon.prototype.setCenter = function(center) {
  */
 ClusterIcon.prototype.createCss = function(pos) {
   var style = [];
-  style.push('background-image:url(' + this.url_ + ');');
-  var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
-  style.push('background-position:' + backgroundPosition + ';');
+  var markerClusterer = this.cluster_.getMarkerClusterer();
+  if (!markerClusterer.cssClass_) {
+	  style.push('background-image:url(' + this.url_ + ');');
+	  var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
+	  style.push('background-position:' + backgroundPosition + ';');
 
-  if (typeof this.anchor_ === 'object') {
-    if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
-        this.anchor_[0] < this.height_) {
-      style.push('height:' + (this.height_ - this.anchor_[0]) +
-          'px; padding-top:' + this.anchor_[0] + 'px;');
-    } else {
-      style.push('height:' + this.height_ + 'px; line-height:' + this.height_ +
-          'px;');
-    }
-    if (typeof this.anchor_[1] === 'number' && this.anchor_[1] > 0 &&
-        this.anchor_[1] < this.width_) {
-      style.push('width:' + (this.width_ - this.anchor_[1]) +
-          'px; padding-left:' + this.anchor_[1] + 'px;');
-    } else {
-      style.push('width:' + this.width_ + 'px; text-align:center;');
-    }
-  } else {
-    style.push('height:' + this.height_ + 'px; line-height:' +
-        this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
+	  if (typeof this.anchor_ === 'object') {
+		if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
+			this.anchor_[0] < this.height_) {
+		  style.push('height:' + (this.height_ - this.anchor_[0]) +
+			  'px; padding-top:' + this.anchor_[0] + 'px;');
+		} else {
+		  style.push('height:' + this.height_ + 'px; line-height:' + this.height_ + 'px;');
+		}
+		if (typeof this.anchor_[1] === 'number' && this.anchor_[1] > 0 &&
+			this.anchor_[1] < this.width_) {
+		  style.push('width:' + (this.width_ - this.anchor_[1]) +
+			  'px; padding-left:' + this.anchor_[1] + 'px;');
+		} else {
+		  style.push('width:' + this.width_ + 'px; text-align:center;');
+		}
+	  } else {
+		style.push('height:' + this.height_ + 'px; line-height:' +
+			this.height_ + 'px; width:' + this.width_ + 'px; text-align:center;');
+	  }
+
+	  var txtColor = this.textColor_ ? this.textColor_ : 'black';
+	  var txtSize = this.textSize_ ? this.textSize_ : 11;
+
+	  style.push('cursor:pointer; color:' + txtColor + '; position:absolute; font-size:' +
+		  txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
   }
-
-  var txtColor = this.textColor_ ? this.textColor_ : 'black';
-  var txtSize = this.textSize_ ? this.textSize_ : 11;
-
-  style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
-      pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
-      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+  else {
+	style.push('top:' + pos.y + 'px; left:' +
+		pos.x + 'px;');
+  }
   return style.join('');
 };
 
