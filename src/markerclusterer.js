@@ -1042,6 +1042,8 @@ function ClusterIcon(cluster, styles, opt_padding) {
 
 /**
  * Triggers the clusterclick event and zoom's if the option is set.
+ *
+ * @param {google.maps.MouseEvent} event The event to propagate
  */
 ClusterIcon.prototype.triggerClusterClick = function(event) {
   var markerClusterer = this.cluster_.getMarkerClusterer();
