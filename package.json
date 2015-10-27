@@ -1,0 +1,30 @@
+{
+  "name": "js-marker-clusterer",
+  "version": "1.0.0",
+  "description": "The library creates and manages per-zoom-level clusters for large amounts of markers. Google API v3.",
+  "main": "src/markerclusterer.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/googlemaps/js-marker-clusterer.git"
+  },
+  "keywords": [
+    "google",
+    "marker",
+    "cluster",
+    "clusterer",
+    "javascript",
+    "js",
+    "api",
+    "v3"
+  ],
+  "author": "Luke Mahe",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/googlemaps/js-marker-clusterer/issues"
+  },
+  "homepage": "https://github.com/googlemaps/js-marker-clusterer#readme"
+}
