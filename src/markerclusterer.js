@@ -1063,6 +1063,20 @@ ClusterIcon.prototype.triggerClusterClick = function(event) {
  * @ignore
  */
 ClusterIcon.prototype.onAdd = function() {
+  var allMarkersVisible = false;
+  if (this.cluster_) {
+    for (var i in this.cluster_.markers_) {
+      var marker = this.cluster_.markers_[i];
+      if (marker.visible) {
+          allMarkersVisible = true;
+          break;
+      }
+    }
+  }
+  if (!allMarkersVisible) {
+    this.visible_ = false;
+  }
+
   this.div_ = document.createElement('DIV');
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
