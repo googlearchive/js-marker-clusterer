@@ -859,7 +859,8 @@ Cluster.prototype.addMarker = function(marker) {
   marker.isAdded = true;
   this.markers_.push(marker);
 
-  var len = this.getVisibleMarkers().length;
+  var visibleMarkers = this.getVisibleMarkers();
+  var len = visibleMarkers.length;
   if (len < this.minClusterSize_ && marker.getMap() != this.map_) {
     // Min cluster size not reached so show the marker.
     marker.setMap(this.map_);
@@ -868,7 +869,7 @@ Cluster.prototype.addMarker = function(marker) {
   if (len == this.minClusterSize_) {
     // Hide the markers that were showing.
     for (var i = 0; i < len; i++) {
-      this.markers_[i].setMap(null);
+      visibleMarkers[i].setMap(null);
     }
   }
 
