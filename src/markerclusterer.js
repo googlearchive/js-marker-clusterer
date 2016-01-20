@@ -1012,7 +1012,7 @@ Cluster.prototype.updateIcon = function() {
     return;
   }
 
-  if (markers_.length < this.minClusterSize_) {
+  if (markers.length < this.minClusterSize_) {
     // Min cluster size not yet reached.
     this.clusterIcon_.hide();
     return;
