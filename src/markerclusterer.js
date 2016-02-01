@@ -88,6 +88,11 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.styles_ = [];
 
   /**
+   * @private
+   */
+  this.cssClass_ = null;
+
+  /**
    * @type {boolean}
    * @private
    */
@@ -114,6 +119,8 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.maxZoom_ = options['maxZoom'] || null;
 
   this.styles_ = options['styles'] || [];
+
+  this.cssClass_ = options['cssClass'] || null;
 
   /**
    * @type {string}
@@ -1068,6 +1075,10 @@ ClusterIcon.prototype.onAdd = function() {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
     this.div_.innerHTML = this.sums_.text;
+    var markerClusterer = this.cluster_.getMarkerClusterer();
+    if (markerClusterer.cssClass_) {
+ 	    this.div_.className = markerClusterer.cssClass_;
+ 	  }
   }
 
   var panes = this.getPanes();
@@ -1214,6 +1225,7 @@ ClusterIcon.prototype.setCenter = function(center) {
  */
 ClusterIcon.prototype.createCss = function(pos) {
   var style = [];
+  var markerClusterer = this.cluster_.getMarkerClusterer();
   style.push('background-image:url(' + this.url_ + ');');
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
@@ -1249,6 +1261,7 @@ ClusterIcon.prototype.createCss = function(pos) {
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
       pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
       txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+
   return style.join('');
 };
 
