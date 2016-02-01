@@ -1225,7 +1225,6 @@ ClusterIcon.prototype.setCenter = function(center) {
  */
 ClusterIcon.prototype.createCss = function(pos) {
   var style = [];
-  var markerClusterer = this.cluster_.getMarkerClusterer();
   style.push('background-image:url(' + this.url_ + ');');
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
@@ -1261,7 +1260,6 @@ ClusterIcon.prototype.createCss = function(pos) {
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
       pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
       txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
-
   return style.join('');
 };
 
