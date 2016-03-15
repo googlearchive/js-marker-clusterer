@@ -43,6 +43,8 @@
  *                cluster.
  *     'zoomOnClick': (boolean) Whether the default behaviour of clicking on a
  *                    cluster is to zoom into it.
+ *     'maxZoomOnClick': (number) The maximum zoom level that will be applied to
+ *                       map on click on cluster.
  *     'averageCenter': (boolean) Wether the center of each cluster should be
  *                      the average of all markers in the cluster.
  *     'minimumClusterSize': (number) The minimum number of markers to be in a
@@ -144,6 +146,16 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
   if (options['zoomOnClick'] != undefined) {
     this.zoomOnClick_ = options['zoomOnClick'];
+  }
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.maxZoomOnClick_ = 20;
+
+  if (options['maxZoomOnClick'] != undefined) {
+    this.maxZoomOnClick_ = options['maxZoomOnClick'];
   }
 
   /**
@@ -1059,6 +1071,9 @@ ClusterIcon.prototype.triggerClusterClick = function(event) {
   google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_, event);
 
   if (markerClusterer.isZoomOnClick()) {
+    google.maps.event.addListenerOnce(this.map_, 'bounds_changed', function(e) {
+      if (this.getZoom() > markerClusterer.maxZoomOnClick_) this.setZoom(markerClusterer.maxZoomOnClick_);
+    });
     // Zoom into the cluster.
     this.map_.fitBounds(this.cluster_.getBounds());
   }
