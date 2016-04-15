@@ -99,7 +99,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @type {number}
    * @private
    */
-  this.gridSize_ = options['gridSize'] || 60;
+  this.gridSize_ = (options['gridSize'] !== undefined) ? options['gridSize'] : 60;
 
   /**
    * @private
