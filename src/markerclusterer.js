@@ -188,7 +188,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
  * @private
  */
 MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ =
-    'https://googlemaps.github.io/js-marker-clusterer/' +
+    'https://cdn.rawgit.com/googlemaps/js-marker-clusterer/gh-pages/' +
     'images/m';
 
 
