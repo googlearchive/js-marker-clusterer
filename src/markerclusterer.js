@@ -12,7 +12,7 @@
  * markers.
  * <br/>
  * This is a v3 implementation of the
- * <a href="http://gmaps-utility-library-dev.googlecode.com/svn/tags/markerclusterer/"
+ * <a href="https://github.com/googlemaps/js-marker-clusterer/"
  * >v2 MarkerClusterer</a>.
  */
 
@@ -188,7 +188,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
  * @private
  */
 MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ =
-    'https://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/' +
+    'https://raw.githubusercontent.com/googlemaps/js-marker-clusterer/gh-pages/' +
     'images/m';
 
 
