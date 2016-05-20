@@ -112,7 +112,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @type {boolean}
    * @private
    */
-  this.ignoreHiddenMarkers = options['ignoreHiddenMarkers'] || false;
+  this.ignoreHiddenMarkers_ = options['ignoreHiddenMarkers'] || false;
 
   /**
    * @type {?number}
@@ -791,7 +791,7 @@ MarkerClusterer.prototype.createClusters_ = function() {
   var bounds = this.getExtendedBounds(mapBounds);
 
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
-    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds) && (!this.ignoreHiddenMarkers || marker.getVisible())) {
+    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds) && (!this.ignoreHiddenMarkers_ || marker.getVisible())) {
       this.addToClosestCluster_(marker);
     }
   }
