@@ -39,15 +39,7 @@
 
     <script src="https://maps.googleapis.com/maps/api/js"></script>
     <script src="data.json"></script>
-    <script>
-      var script = '<script type="text/javascript" src="../src/markerclusterer';
-      if (document.location.search.indexOf('compiled') !== -1) {
-        script += '_compiled';
-      }
-      script += '.js"><' + '/script>';
-      document.write(script);
-    </script>
-
+    <script type="text/javascript" src="../src/markerclusterer.js"></script>
     <script>
       var styles = [[{
         url: '../images/people35.png',
@@ -187,10 +179,6 @@
   </head>
   <body>
     <h3>An example of MarkerClusterer v3</h3>
-    <p>
-      <a href="?compiled">Compiled</a> |
-      <a href="?">Standard</a> version of the script.
-    </p>
     <div id="map-container">
       <div id="map"></div>
     </div>
