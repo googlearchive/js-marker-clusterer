@@ -48,6 +48,8 @@
  *     'minimumClusterSize': (number) The minimum number of markers to be in a
  *                           cluster before the markers are hidden and a count
  *                           is shown.
+ *     'ignoreHiddenMarkers': (boolean) Whether to ignore markers that are not
+ *                            visible or count and cluster them anyway
  *     'styles': (object) An object that has style properties:
  *       'url': (string) The image url.
  *       'height': (number) The image height.
@@ -106,6 +108,11 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.minClusterSize_ = options['minimumClusterSize'] || 2;
 
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.ignoreHiddenMarkers_ = options['ignoreHiddenMarkers'] || false;
 
   /**
    * @type {?number}
@@ -782,7 +789,7 @@ MarkerClusterer.prototype.createClusters_ = function() {
   var bounds = this.getExtendedBounds(mapBounds);
 
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
-    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
+    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds) && (!this.ignoreHiddenMarkers_ || marker.getVisible())) {
       this.addToClosestCluster_(marker);
     }
   }
