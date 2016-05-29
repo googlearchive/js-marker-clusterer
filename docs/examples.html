@@ -35,9 +35,13 @@ var map = new google.maps.Map(document.getElementById("map"), options);
 var mc = new MarkerClusterer(map);
 </pre>
 
-     <p>You may also specify a number of options to fine-tune the marker
-        manager's performance. These options are passed via a object.
+     <p>
+         You may also specify a number of options to fine-tune the marker
+         manager's performance. These options are passed via a object.
      </p>
+    <p>
+        The <code>imagePath</code> option needs to be set to the location of your local marker images.
+    </p>
 
 <pre class="prettyprint">
 var center = new google.maps.LatLng(37.4419, -122.1419);
@@ -49,7 +53,7 @@ var options = {
 
 var map = new google.maps.Map(document.getElementById("map"), options);
 
-var mcOptions = {gridSize: 50, maxZoom: 15};
+var mcOptions = {gridSize: 50, maxZoom: 15, imagePath: 'images/m'};
 var mc = new MarkerClusterer(map, [], mcOptions);
 </pre>
 
@@ -67,7 +71,7 @@ var options = {
 
 var map = new google.maps.Map(document.getElementById("map"), options);
 
-var mcOptions = {gridSize: 50, maxZoom: 15};
+var mcOptions = {gridSize: 50, maxZoom: 15, imagePath: 'images/m'};
 var markers = [...]; // Create the markers you want to add and collect them into a array.
 var mc = new MarkerClusterer(map, markers, mcOptions);
 </pre>
@@ -93,7 +97,7 @@ for (var i = 0; i &lt; 100; i++) {
   var marker = new google.maps.Marker({'position': latLng});
   markers.push(marker);
 }
-var markerCluster = new MarkerClusterer(map, markers);
+var markerCluster = new MarkerClusterer(map, markers, {imagePath: 'images/m'});
 </pre>
 
     <p><a href="../examples/simple_example.html">View example (simple_example.html)</a></p>

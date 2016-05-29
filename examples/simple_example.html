@@ -50,7 +50,7 @@
           });
           markers.push(marker);
         }
-        var markerCluster = new MarkerClusterer(map, markers);
+        var markerCluster = new MarkerClusterer(map, markers, {imagePath: '../images/m'});
       }
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>

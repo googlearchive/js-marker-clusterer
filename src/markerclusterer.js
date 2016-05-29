@@ -43,7 +43,7 @@
  *                cluster.
  *     'zoomOnClick': (boolean) Whether the default behaviour of clicking on a
  *                    cluster is to zoom into it.
- *     'averageCenter': (boolean) Wether the center of each cluster should be
+ *     'averageCenter': (boolean) Whether the center of each cluster should be
  *                      the average of all markers in the cluster.
  *     'minimumClusterSize': (number) The minimum number of markers to be in a
  *                           cluster before the markers are hidden and a count
