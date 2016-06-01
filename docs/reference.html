@@ -122,6 +122,106 @@ This is a v3 implementation of the
             
           </tbody>
         </table>
+
+        <h3>Options</h3>
+        <table summary="class MarkerClusterer - Constructor" width="90%">
+
+          <tbody>
+            <tr>
+              <th>Name</th>
+
+              <th>Type</th>
+
+              <th>Description</th>
+            </tr>
+
+            <tr>
+              <td><code>gridSize</code></td>
+              <td><code>number</code></td>
+              <td>The grid size of a cluster in pixels.</td>
+            </tr>
+            <tr>
+              <td><code>maxZoom</code></td>
+              <td><code>number</code></td>
+              <td>The maximum zoom level that a marker can be part of a cluster.</td>
+            </tr>
+            <tr>
+              <td><code>zoomOnClick</code></td>
+              <td><code>boolean</code></td>
+              <td>Whether the default behaviour of clicking on a cluster is to zoom into it.</td>
+            </tr>
+            <tr>
+              <td><code>averageCenter</code></td>
+              <td><code>boolean</code></td>
+              <td>Whether the center of each cluster should be the average of all markers in the cluster.</td>
+            </tr>
+            <tr>
+              <td><code>minimumClusterSize</code></td>
+              <td><code>number</code></td>
+              <td>The minimum number of markers to be in a cluster before the markers are hidden and a count is shown.</td>
+            </tr>
+            <tr>
+              <td><code>styles</code></td>
+              <td><code>object</code></td>
+              <td>An object that has style properties.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Styles</h3>
+        <table summary="class MarkerClusterer - Constructor" width="90%">
+
+          <tbody>
+          <tr>
+            <th>Name</th>
+
+            <th>Type</th>
+
+            <th>Description</th>
+          </tr>
+
+          <tr>
+            <td><code>url</code></td>
+            <td><code>string</code></td>
+            <td>The image url.</td>
+          </tr>
+          <tr>
+            <td><code>height</code></td>
+            <td><code>number</code></td>
+            <td>The image height.</td>
+          </tr>
+          <tr>
+            <td><code>width</code></td>
+            <td><code>number</code></td>
+            <td>The image width.</td>
+          </tr>
+          <tr>
+            <td><code>anchor</code></td>
+            <td><code>Array</code></td>
+            <td>The anchor position of the label text.</td>
+          </tr>
+          <tr>
+            <td><code>textColor</code></td>
+            <td><code>string</code></td>
+            <td>The text color.</td>
+          </tr>
+          <tr>
+            <td><code>textSize</code></td>
+            <td><code>number</code></td>
+            <td>The text size.</td>
+          </tr>
+          <tr>
+            <td><code>backgroundPosition</code></td>
+            <td><code>string</code></td>
+            <td>The position of the backgound x, y.</td>
+          </tr>
+          <tr>
+            <td><code>iconAnchor</code></td>
+            <td><code>Array</code></td>
+            <td>The anchor position of the icon x, y.</td>
+          </tr>
+          </tbody>
+        </table>
       
         <h3>Methods</h3>
         <table summary="class MarkerClusterer - Methods" width="90%">
