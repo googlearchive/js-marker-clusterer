@@ -1072,8 +1072,18 @@ ClusterIcon.prototype.onAdd = function() {
   panes.overlayMouseTarget.appendChild(this.div_);
 
   var that = this;
+  var isDragging = false;
   google.maps.event.addDomListener(this.div_, 'click', function(event) {
-    that.triggerClusterClick(event);
+    // Only perform click when not preceded by a drag
+    if (!isDragging) {
+      that.triggerClusterClick(event);
+    }
+  });
+  google.maps.event.addDomListener(this.div_, 'mousedown', function() {
+    isDragging = false;
+  });
+  google.maps.event.addDomListener(this.div_, 'mousemove', function() {
+    isDragging = true;
   });
 };
 
