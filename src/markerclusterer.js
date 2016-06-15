@@ -245,12 +245,12 @@ MarkerClusterer.prototype.setupStyles_ = function() {
   }
 
   for (var i = 0, size; size = this.sizes[i]; i++) {
-    var url = ''
+    var url = '';
 
     if (typeof this.imagePath_ === 'function') {
-      url = this.imagePath_(i, size)
+      url = this.imagePath_(i, size);
     } else {
-      url = this.imagePath_ + (i + 1) + '.' + this.imageExtension_
+      url = this.imagePath_ + (i + 1) + '.' + this.imageExtension_;
     }
 
     this.styles_.push({
