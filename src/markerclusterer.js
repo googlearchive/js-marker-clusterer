@@ -860,7 +860,8 @@ Cluster.prototype.addMarker = function(marker) {
   marker.isAdded = true;
   this.markers_.push(marker);
 
-  var len = this.markers_.length;
+  var visibleMarkers = this.getVisibleMarkers();
+  var len = visibleMarkers.length;
   if (len < this.minClusterSize_ && marker.getMap() != this.map_) {
     // Min cluster size not reached so show the marker.
     marker.setMap(this.map_);
@@ -869,7 +870,7 @@ Cluster.prototype.addMarker = function(marker) {
   if (len == this.minClusterSize_) {
     // Hide the markers that were showing.
     for (var i = 0; i < len; i++) {
-      this.markers_[i].setMap(null);
+      visibleMarkers[i].setMap(null);
     }
   }
 
@@ -938,6 +939,23 @@ Cluster.prototype.getMarkers = function() {
 
 
 /**
+ *  Returns the array of markers in the cluster.
+ *
+ *  @return {Array.<google.maps.Marker>} The markers.
+ */
+Cluster.prototype.getVisibleMarkers = function() {
+  var visibleMarkers = [];
+  for (var i in this.markers_) {
+    var marker = this.markers_[i];
+    if (marker.visible) {
+      visibleMarkers.push(marker);
+    }
+  }
+  return visibleMarkers;
+};
+
+
+/**
  * Returns the center of the cluster.
  *
  * @return {google.maps.LatLng} The cluster center.
@@ -985,23 +1003,24 @@ Cluster.prototype.getMap = function() {
 Cluster.prototype.updateIcon = function() {
   var zoom = this.map_.getZoom();
   var mz = this.markerClusterer_.getMaxZoom();
+  var markers = this.getVisibleMarkers();
 
   if (mz && zoom > mz) {
     // The zoom is greater than our max zoom so show all the markers in cluster.
-    for (var i = 0, marker; marker = this.markers_[i]; i++) {
+    for (var i = 0, marker; marker = markers[i]; i++) {
       marker.setMap(this.map_);
     }
     return;
   }
 
-  if (this.markers_.length < this.minClusterSize_) {
+  if (markers.length < this.minClusterSize_) {
     // Min cluster size not yet reached.
     this.clusterIcon_.hide();
     return;
   }
 
   var numStyles = this.markerClusterer_.getStyles().length;
-  var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles);
+  var sums = this.markerClusterer_.getCalculator()(markers, numStyles);
   this.clusterIcon_.setCenter(this.center_);
   this.clusterIcon_.setSums(sums);
   this.clusterIcon_.show();
@@ -1309,6 +1328,7 @@ MarkerClusterer.prototype['draw'] = MarkerClusterer.prototype.draw;
 Cluster.prototype['getCenter'] = Cluster.prototype.getCenter;
 Cluster.prototype['getSize'] = Cluster.prototype.getSize;
 Cluster.prototype['getMarkers'] = Cluster.prototype.getMarkers;
+Cluster.prototype['getVisibleMarkers'] = Cluster.prototype.getVisibleMarkers;
 
 ClusterIcon.prototype['onAdd'] = ClusterIcon.prototype.onAdd;
 ClusterIcon.prototype['draw'] = ClusterIcon.prototype.draw;
