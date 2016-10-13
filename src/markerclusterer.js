@@ -354,8 +354,9 @@ MarkerClusterer.prototype.getMaxZoom = function() {
  *  @return {Object} A object properties: 'text' (string) and 'index' (number).
  *  @private
  */
-MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
+MarkerClusterer.prototype.calculator_ = function(markers, numStyles, total) {
   var index = 0;
+  var level = 0;
   var count = markers.length;
   var dv = count;
   while (dv !== 0) {
@@ -363,10 +364,14 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
     index++;
   }
 
+  level = index;
   index = Math.min(index, numStyles);
   return {
     text: count,
-    index: index
+    count: count,
+    level: level,
+    index: index,
+    total: total
   };
 };
 
@@ -780,9 +785,17 @@ MarkerClusterer.prototype.createClusters_ = function() {
 
   // Get our current map view bounds.
   // Create a new bounds object so we don't affect the map.
+  var that = this;
   var mapBounds = new google.maps.LatLngBounds(this.map_.getBounds().getSouthWest(),
       this.map_.getBounds().getNorthEast());
   var bounds = this.getExtendedBounds(mapBounds);
+  var total = 0;
+
+  this.markers_.map(function(m){
+    if(!m.isAdded && that.isMarkerInBounds_(m, bounds)) total++;
+  });
+
+  this.total_ = total;
 
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
     if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
@@ -1000,8 +1013,9 @@ Cluster.prototype.updateIcon = function() {
     return;
   }
 
+  var total = this.markerClusterer_.total_;
   var numStyles = this.markerClusterer_.getStyles().length;
-  var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles);
+  var sums = this.markerClusterer_.getCalculator()(this.markers_, numStyles, total);
   this.clusterIcon_.setCenter(this.center_);
   this.clusterIcon_.setSums(sums);
   this.clusterIcon_.show();
@@ -1068,7 +1082,16 @@ ClusterIcon.prototype.onAdd = function() {
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
-    this.div_.innerHTML = this.sums_.text;
+    if(this.svg_){
+      var svg = null;
+      var text = '<span style="position:relative; z-index:10">'+this.sums_.text+'</span>';
+      if(typeof this.svg_ == 'function') svg = this.svg_(this.sums_);
+      else svg = this.svg_;
+      svg = '<svg style="position:absolute; top:0; left:0; height:100%; width:100%; z-index:0;">'+svg+'</svg>';
+      if(typeof this.svg_ == 'function') this.div_.innerHTML = svg;
+      else this.div_.innerHTML = svg + text;
+    }
+    else this.div_.innerHTML = this.sums_.text;
   }
 
   var panes = this.getPanes();
@@ -1076,7 +1099,8 @@ ClusterIcon.prototype.onAdd = function() {
 
   var that = this;
   var isDragging = false;
-  google.maps.event.addDomListener(this.div_, 'click', function(event) {
+  var click_elem = this.svg_? this.div_.children[0] : this.div_;
+  google.maps.event.addDomListener(click_elem, 'click', function(event) {
     // Only perform click when not preceded by a drag
     if (!isDragging) {
       that.triggerClusterClick(event);
@@ -1197,6 +1221,7 @@ ClusterIcon.prototype.useStyle = function() {
   index = Math.min(this.styles_.length - 1, index);
   var style = this.styles_[index];
   this.url_ = style['url'];
+  this.svg_ = style['svg'];
   this.height_ = style['height'];
   this.width_ = style['width'];
   this.textColor_ = style['textColor'];
@@ -1225,9 +1250,11 @@ ClusterIcon.prototype.setCenter = function(center) {
  */
 ClusterIcon.prototype.createCss = function(pos) {
   var style = [];
-  style.push('background-image:url(' + this.url_ + ');');
-  var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
-  style.push('background-position:' + backgroundPosition + ';');
+  if(this.url_){
+    style.push('background-image:url(' + this.url_ + ');');
+    var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
+    style.push('background-position:' + backgroundPosition + ';');
+  }
 
   if (typeof this.anchor_ === 'object') {
     if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
