@@ -83,6 +83,16 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.clusters_ = [];
 
+  /**
+   * @type {Object} holding information about every markers cluster
+   */
+  this.markersCluster_ = {};
+
+  /**
+   * @type {Number} Unique markers ID
+   */
+  this.markersUniqueID = 1;
+
   this.sizes = [53, 56, 66, 78, 90];
 
   /**
@@ -347,6 +357,18 @@ MarkerClusterer.prototype.getMaxZoom = function() {
 
 
 /**
+ * Gets marker's cluster object based on given marker
+ * 
+ * @param  {google.maps.Marker} marker
+ * 
+ * @return {Cluster}
+ */
+MarkerClusterer.prototype.getMarkersCluster = function(marker) {
+  return this.clusters_[this.markersCluster_[marker.uniqueID]];
+};
+
+
+/**
  *  The function for calculating the cluster icon image.
  *
  *  @param {Array.<google.maps.Marker>} markers The markers in the clusterer.
@@ -427,6 +449,8 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
       that.repaint();
     });
   }
+  marker.uniqueID = this.markersUniqueID;
+  this.markersUniqueID++;
   this.markers_.push(marker);
 };
 
@@ -473,6 +497,7 @@ MarkerClusterer.prototype.removeMarker_ = function(marker) {
   marker.setMap(null);
 
   this.markers_.splice(index, 1);
+  delete this.markersCluster_[marker.uniqueID];
 
   return true;
 };
@@ -660,6 +685,8 @@ MarkerClusterer.prototype.clearMarkers = function() {
 
   // Set the markers a empty array.
   this.markers_ = [];
+  this.markersCluster_ = {};
+  this.markersUniqueID = 1;
 };
 
 
@@ -682,6 +709,8 @@ MarkerClusterer.prototype.resetViewport = function(opt_hide) {
   }
 
   this.clusters_ = [];
+  this.markersCluster_ = {};
+  this.markersUniqueID = 1;
 };
 
 /**
@@ -747,6 +776,7 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
   var distance = 40000; // Some large number
   var clusterToAddTo = null;
   var pos = marker.getPosition();
+  var clusterIndex = null;
   for (var i = 0, cluster; cluster = this.clusters_[i]; i++) {
     var center = cluster.getCenter();
     if (center) {
@@ -754,6 +784,7 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
       if (d < distance) {
         distance = d;
         clusterToAddTo = cluster;
+        clusterIndex = i;
       }
     }
   }
@@ -764,6 +795,11 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
     var cluster = new Cluster(this);
     cluster.addMarker(marker);
     this.clusters_.push(cluster);
+    clusterIndex = this.clusters_.length - 1;
+  }
+
+  if (marker.isAdded) {
+    this.markersCluster_[marker.uniqueID] = clusterIndex;
   }
 };
 
@@ -1283,6 +1319,7 @@ MarkerClusterer.prototype['getExtendedBounds'] =
 MarkerClusterer.prototype['getMap'] = MarkerClusterer.prototype.getMap;
 MarkerClusterer.prototype['getMarkers'] = MarkerClusterer.prototype.getMarkers;
 MarkerClusterer.prototype['getMaxZoom'] = MarkerClusterer.prototype.getMaxZoom;
+MarkerClusterer.prototype['getMarkersCluster'] = MarkerClusterer.prototype.getMarkersCluster;
 MarkerClusterer.prototype['getStyles'] = MarkerClusterer.prototype.getStyles;
 MarkerClusterer.prototype['getTotalClusters'] =
     MarkerClusterer.prototype.getTotalClusters;
