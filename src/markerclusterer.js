@@ -126,7 +126,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.cssClass_ = options['cssClass'];
 
-  if (this.styles_.length && this.cssClass_)
+  if (Object.keys(this.styles_).length > 0 && this.cssClass_)
     console.warn("A custom style and cssClass is applied. The custom style will be discarded.");
 
   /**
