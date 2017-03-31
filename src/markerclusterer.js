@@ -708,6 +708,7 @@ MarkerClusterer.prototype.repaint = function() {
  */
 MarkerClusterer.prototype.redraw = function() {
   this.createClusters_();
+  google.maps.event.trigger(this.map_, 'clusters_redrawn', this.clusters_);
 };
 
 
