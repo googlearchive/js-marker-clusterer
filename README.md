@@ -1,4 +1,4 @@
-**Please note:** This repository is not currently maintained, and is kept for historical purpose only.
+**Please note:** This repository is kept for historical purpose only - the current version of marker clusterer is available as part of the [v3-utility-library repository](https://github.com/googlemaps/v3-utility-library/tree/master/markerclustererplus). 
 
 Marker Clusterer – A Google Maps JavaScript API utility library
 ==============
