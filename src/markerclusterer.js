@@ -695,7 +695,7 @@ MarkerClusterer.prototype.repaint = function() {
 
   // Remove the old clusters.
   // Do it in a timeout so the other clusters have been drawn first.
-  window.setTimeout(function() {
+  setTimeout(function() {
     for (var i = 0, cluster; cluster = oldClusters[i]; i++) {
       cluster.remove();
     }
