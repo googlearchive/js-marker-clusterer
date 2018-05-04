@@ -402,7 +402,9 @@ MarkerClusterer.prototype.getCalculator = function() {
  */
 MarkerClusterer.prototype.addMarkers = function(markers, opt_nodraw) {
   for (var i = 0, marker; marker = markers[i]; i++) {
-    this.pushMarkerTo_(marker);
+    if (marker.getMap() != null){
+      this.pushMarkerTo_(marker);
+    }
   }
   if (!opt_nodraw) {
     this.redraw();
