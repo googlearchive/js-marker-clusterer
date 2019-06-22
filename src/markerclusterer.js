@@ -51,6 +51,8 @@
  *     'minimumClusterSize': (number) The minimum number of markers to be in a
  *                           cluster before the markers are hidden and a count
  *                           is shown.
+ *     'cssClass': (string) Css class to add to each cluster maker. This will 
+ *                 also remove default style and ignore 'styles' parameter.
  *     'styles': (object) An object that has style properties:
  *       'url': (string) The image url.
  *       'height': (number) The image height.
@@ -117,6 +119,15 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.maxZoom_ = options['maxZoom'] || null;
 
   this.styles_ = options['styles'] || [];
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.cssClass_ = options['cssClass'];
+
+  if (Object.keys(this.styles_).length > 0 && this.cssClass_)
+    console.warn("A custom style and cssClass is applied. The custom style will be discarded.");
 
   /**
    * @type {string}
@@ -810,7 +821,7 @@ function Cluster(markerClusterer) {
   this.markers_ = [];
   this.bounds_ = null;
   this.clusterIcon_ = new ClusterIcon(this, markerClusterer.getStyles(),
-      markerClusterer.getGridSize());
+      markerClusterer.getGridSize(), markerClusterer.cssClass_);
 }
 
 /**
@@ -1021,13 +1032,15 @@ Cluster.prototype.updateIcon = function() {
  *     'textSize': (number) The text size.
  *     'backgroundPosition: (string) The background postition x, y.
  * @param {number=} opt_padding Optional padding to apply to the cluster icon.
+ * @param {string} cssClass (string) Css class to add to each cluster maker. This will also remove default style and ignore 'styles' parameter.
  * @constructor
  * @extends google.maps.OverlayView
  * @ignore
  */
-function ClusterIcon(cluster, styles, opt_padding) {
+function ClusterIcon(cluster, styles, opt_padding, cssClass) {
   cluster.getMarkerClusterer().extend(ClusterIcon, google.maps.OverlayView);
 
+  this.cssClass_ = cssClass;
   this.styles_ = styles;
   this.padding_ = opt_padding || 0;
   this.cluster_ = cluster;
@@ -1068,7 +1081,8 @@ ClusterIcon.prototype.onAdd = function() {
   this.div_ = document.createElement('DIV');
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
-    this.div_.style.cssText = this.createCss(pos);
+    this.div_.style.cssText = this.createCss(pos, !!this.cssClass_);
+    this.div_.className += this.cssClass_;
     this.div_.innerHTML = this.sums_.text;
   }
 
@@ -1143,7 +1157,7 @@ ClusterIcon.prototype.hide = function() {
 ClusterIcon.prototype.show = function() {
   if (this.div_) {
     var pos = this.getPosFromLatLng_(this.center_);
-    this.div_.style.cssText = this.createCss(pos);
+    this.div_.style.cssText = this.createCss(pos, !!this.cssClass_);
     this.div_.style.display = '';
   }
   this.visible_ = true;
@@ -1222,9 +1236,18 @@ ClusterIcon.prototype.setCenter = function(center) {
  * Create the css text based on the position of the icon.
  *
  * @param {google.maps.Point} pos The position.
+ * @param {bool} hasCssClass If a cssClass is supplied, discard inline styling
  * @return {string} The css style text.
  */
-ClusterIcon.prototype.createCss = function(pos) {
+ClusterIcon.prototype.createCss = function(pos, hasCssClass) {
+  if(hasCssClass) {
+    return +
+    'top:' + pos.y + 'px;'   +
+    'left:' + pos.x + 'px;'  +
+    'cursor:pointer;' +
+    'position:absolute;';
+  }
+
   var style = [];
   style.push('background-image:url(' + this.url_ + ');');
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
