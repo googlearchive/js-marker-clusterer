@@ -71,7 +71,8 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   // there is no point going ahead :)
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
-
+  this.listeners = {};
+  
   /**
    * @type {Array.<google.maps.Marker>}
    * @private
@@ -156,27 +157,6 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
   this.setMap(map);
 
-  /**
-   * @type {number}
-   * @private
-   */
-  this.prevZoom_ = this.map_.getZoom();
-
-  // Add the map event listeners
-  var that = this;
-  google.maps.event.addListener(this.map_, 'zoom_changed', function() {
-    var zoom = that.map_.getZoom();
-
-    if (that.prevZoom_ != zoom) {
-      that.prevZoom_ = zoom;
-      that.resetViewport();
-    }
-  });
-
-  google.maps.event.addListener(this.map_, 'idle', function() {
-    that.redraw();
-  });
-
   // Finally, add the markers
   if (opt_markers && opt_markers.length) {
     this.addMarkers(opt_markers, false);
@@ -226,6 +206,14 @@ MarkerClusterer.prototype.extend = function(obj1, obj2) {
  */
 MarkerClusterer.prototype.onAdd = function() {
   this.setReady_(true);
+};
+
+/**
+ * Implementaion of the interface method.
+ * @ignore
+ */
+MarkerClusterer.prototype.onRemove = function () {
+    this.setReady_(false);
 };
 
 /**
@@ -422,7 +410,7 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
     // If the marker is draggable add a listener so we update the clusters on
     // the drag end.
     var that = this;
-    google.maps.event.addListener(marker, 'dragend', function() {
+    this.listeners.dragend = google.maps.event.addListener(marker, 'dragend', function() {
       marker.isAdded = false;
       that.repaint();
     });
@@ -527,9 +515,39 @@ MarkerClusterer.prototype.removeMarkers = function(markers, opt_nodraw) {
  * @private
  */
 MarkerClusterer.prototype.setReady_ = function(ready) {
-  if (!this.ready_) {
-    this.ready_ = ready;
+  if (ready == this.ready_) {return;}
+  this.ready_ = ready;
+  if (this.ready_) {
+    if (!this.map) return;
+    this.map_ = this.map;
+    this.prevZoom_ = this.map.getZoom();
+    // Add the map event listeners
+    var that = this;
+    this.listeners.zoom_changed = google.maps.event.addListener(this.map_, 'zoom_changed', function() {
+        var zoom = that.map_.getZoom();
+
+        if (that.prevZoom_ != zoom) {
+          that.prevZoom_ = zoom;
+          that.resetViewport();
+        }
+    });
+    this.listeners.idle = google.maps.event.addListener(this.map_, 'idle', function() {
+        that.redraw();
+    });
+    if(this.markers_ && this.markers_.length){
+        for (var i = 0, marker; marker = this.markers_[i]; i++) {
+            marker.setMap(this.map);
+        }
+    }
     this.createClusters_();
+  } else {
+    this.resetViewport(true);
+    // remove event listeners on the map
+    for(var key in this.listeners) {
+        google.maps.event.removeListener(this.listeners[key]);
+        delete this.listeners[key];
+    }
+    this.map_ = null;
   }
 };
 
