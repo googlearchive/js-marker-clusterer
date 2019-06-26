@@ -1076,18 +1076,18 @@ ClusterIcon.prototype.onAdd = function() {
   panes.overlayMouseTarget.appendChild(this.div_);
 
   var that = this;
-  var isDragging = false;
+  var inClickMs = 0;
   google.maps.event.addDomListener(this.div_, 'click', function(event) {
-    // Only perform click when not preceded by a drag
-    if (!isDragging) {
+    // Only perform fast click to zoom
+    if (inClickMs < 300) {
       that.triggerClusterClick(event);
     }
   });
   google.maps.event.addDomListener(this.div_, 'mousedown', function() {
-    isDragging = false;
+    inClickMs = Date.now();
   });
-  google.maps.event.addDomListener(this.div_, 'mousemove', function() {
-    isDragging = true;
+  google.maps.event.addDomListener(this.div_, 'mouseup', function() {
+    inClickMs = Date.now() - inClickMs;
   });
 };
 
