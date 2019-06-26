@@ -1078,6 +1078,12 @@ ClusterIcon.prototype.onAdd = function() {
   var that = this;
   var isDragging = false;
   google.maps.event.addDomListener(this.div_, 'click', function(event) {
+    // Prevent event propagation
+    event.cancelBubble = true;
+    if (event.stopPropagation){
+      event.stopPropagation();
+    }
+
     // Only perform click when not preceded by a drag
     if (!isDragging) {
       that.triggerClusterClick(event);
