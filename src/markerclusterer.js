@@ -1245,7 +1245,7 @@ ClusterIcon.prototype.createCss = function(pos) {
     }
     if (typeof this.anchor_[1] === 'number' && this.anchor_[1] > 0 &&
         this.anchor_[1] < this.width_) {
-      style.push('width:' + (this.width_ - this.anchor_[1]) +
+      style.push('width:' + this.width_ +
           'px; padding-left:' + this.anchor_[1] + 'px;');
     } else {
       style.push('width:' + this.width_ + 'px; text-align:center;');
