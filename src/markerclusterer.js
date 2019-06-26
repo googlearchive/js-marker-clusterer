@@ -1077,6 +1077,7 @@ ClusterIcon.prototype.onAdd = function() {
 
   var that = this;
   var isDragging = false;
+  var isMouseDown = false;
   google.maps.event.addDomListener(this.div_, 'click', function(event) {
     // Only perform click when not preceded by a drag
     if (!isDragging) {
@@ -1085,9 +1086,16 @@ ClusterIcon.prototype.onAdd = function() {
   });
   google.maps.event.addDomListener(this.div_, 'mousedown', function() {
     isDragging = false;
+    isMouseDown = true;
+  });
+  google.maps.event.addDomListener(this.div_, 'mouseup', function() {
+    isDragging = false;
+    isMouseDown = false;
   });
   google.maps.event.addDomListener(this.div_, 'mousemove', function() {
-    isDragging = true;
+    if (isMouseDown) {
+      isDragging = true;
+    }
   });
 };
 
