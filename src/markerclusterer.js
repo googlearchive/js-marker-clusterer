@@ -105,6 +105,12 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.gridSize_ = options['gridSize'] || 60;
 
   /**
+   * @type {string}
+   * @private
+   */
+  this.clusterClass_ = options['clusterClass'] || 'cluster';
+
+  /**
    * @private
    */
   this.minClusterSize_ = options['minimumClusterSize'] || 2;
@@ -778,6 +784,8 @@ MarkerClusterer.prototype.createClusters_ = function() {
     return;
   }
 
+  google.maps.event.trigger(this, "clusteringbegin");
+
   // Get our current map view bounds.
   // Create a new bounds object so we don't affect the map.
   var mapBounds = new google.maps.LatLngBounds(this.map_.getBounds().getSouthWest(),
@@ -789,6 +797,18 @@ MarkerClusterer.prototype.createClusters_ = function() {
       this.addToClosestCluster_(marker);
     }
   }
+
+  google.maps.event.trigger(this, 'clusteringend');
+};
+
+
+/**
+ * Returns the value of the <code>clusterClass</code> property.
+ *
+ * @return {string} the value of the clusterClass property.
+ */
+MarkerClusterer.prototype.getClusterClass = function () {
+  return this.clusterClass_;
 };
 
 
@@ -1028,6 +1048,7 @@ Cluster.prototype.updateIcon = function() {
 function ClusterIcon(cluster, styles, opt_padding) {
   cluster.getMarkerClusterer().extend(ClusterIcon, google.maps.OverlayView);
 
+  this.className_ = cluster.getMarkerClusterer().getClusterClass();
   this.styles_ = styles;
   this.padding_ = opt_padding || 0;
   this.cluster_ = cluster;
@@ -1066,6 +1087,7 @@ ClusterIcon.prototype.triggerClusterClick = function(event) {
  */
 ClusterIcon.prototype.onAdd = function() {
   this.div_ = document.createElement('DIV');
+  this.div_.className = this.className_;
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
